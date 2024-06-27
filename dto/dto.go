@@ -50,6 +50,15 @@ type AppProductSyncResp struct {
 	Memory         float64 `json:"memory"`                         //内存容量
 	Enable         int8    `json:"enable"`                         //是否可以购买 1可以
 	SupplierCode   string  `json:"supplierCode"`                   //供应商代码
+	//新增 2024/06/27
+	CIDRBlocks []CIDRBlock `json:"cidrBlocks"` //支持网段及数量
+}
+
+//新增 2024/06/27
+//网段
+type CIDRBlock struct {
+	CIDR  string `json:"cidr"` //网段 192.168.0.0/24 172.16.0.0/16 10.0.0.0/8
+	Count int    `json:"count"`
 }
 
 // 创建或修改主账号请求
@@ -198,6 +207,9 @@ type OpenParam struct {
 	AppUsername  string `json:"appUsername" form:"appUsername"`   //渠道商主账号，选填 开通动态代理的时候平台主账号和渠道商主账号两个必填一个
 	Flow         int    `json:"flow" form:"flow"`                 //动态流量 最大102400MB 动态必填 单位MB
 	UseBridge    uint8  `json:"useBridge"`                        //1=使用桥 2=不使用桥 3=随app设置 默认3
+	//新增 2024/06/27
+	CIDRBlocks []CIDRBlock `json:"cidrBlocks"`                 //静态购买所在网段及数量（产品有的才支持）
+	ProjectId  string      `json:"projectId" form:"projectId"` //购买项目id,保留字段，后续会支持
 }
 
 // AppInstanceRenewReq 续费代理资源请求
