@@ -51,8 +51,7 @@ const (
 	//Api提取动态代理
 	DrawByApiUri = "/api/open/app/proxy/draw/api/v2"
 
-	//Encrypt_RSA = "RSA"
-	Encrypt_AES = "AES"
+	Encrypt_AES = "AES" //aes cbc模式
 )
 
 type IpvClient struct {

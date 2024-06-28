@@ -305,29 +305,6 @@ type AppProductAreaResp struct {
 	RegionId    string `json:"regionId"`    //区域id
 }
 
-// AppDistributeFlowReq 分配流量
-/*type AppDistributeFlowReq struct {
-	Amount       int    `json:"amount" form:"amount"`             //流量大小M
-	MainUsername string `json:"mainUsername" form:"mainUsername"` //主账户
-	SubUsername  string `json:"subUsername" form:"subUsername"`   //子账户
-	Power        string `json:"power" form:"power"`               //幂等参数，相同参数不会重复执行
-}*/
-
-/*type AppFlowBalanceReq struct {
-	Username string `json:"username" form:"username"` //账户名
-	Main     bool   `json:"main" form:"main"`         //true 主账号
-}*/
-
-/*type AppFlowBalanceResp struct {
-	Balances []FlowBalance
-}*/
-
-/*type FlowBalance struct {
-	InstanceId string
-	Balance    float64
-	Expired    int64 //有效期 为0 无期限
-}*/
-
 // 异步订单，开通成功或者失败后，进行回调，回调地址为app配置的回调地址
 // 回调参数为
 // type=order|instance
