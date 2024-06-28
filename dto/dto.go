@@ -11,10 +11,10 @@ type AppOpenReq struct {
 }
 
 type Res struct {
-	ReqId string      `json:"reqId"`
-	Code  int         `json:"code"`
-	Msg   string      `json:"msg"`
-	Data  interface{} `json:"data"`
+	ReqId string `json:"reqId"`
+	Code  int    `json:"code"`
+	Msg   string `json:"msg"`
+	Data  string `json:"data"` //密文转base64
 }
 
 // 获取产品列表请求

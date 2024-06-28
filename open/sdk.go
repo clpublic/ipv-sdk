@@ -366,5 +366,12 @@ func (c *IpvClient) postData(uri string, params any) (resData []byte, err error)
 		slog.Error("ipipv_sdk", "Error response:", res)
 		return nil, errors.New(res.Msg)
 	}
-	return json.Marshal(res.Data)
+
+	encrypted, err := base64.StdEncoding.DecodeString(res.Data)
+	if err != nil {
+		return nil, err
+	}
+	return cryptos.AesDecryptCBC(encrypted, c.AppKey)
+
+	//return json.Marshal(res.Data)
 }
