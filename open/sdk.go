@@ -16,33 +16,42 @@ import (
 
 const (
 	// 获取产品库存
-	GetProductStockUri = "/api/open/app/product/query"
+	GetProductStockUri = "/api/open/app/product/query/v2"
 	//创建和修改主账户
-	CreateUserUri = "/api/open/app/user"
+	CreateUserUri = "/api/open/app/user/v2"
 	//同步实名
-	UserAuthUri = "/api/open/app/userAuth"
+	UserAuthUri = "/api/open/app/userAuth/v2"
 	// 获取订单列表
 	GetOrderUri = "/api/open/app/order"
 	// 获取实列列表
-	GetInstanceUri = "/api/open/app/instance"
+	GetInstanceUri = "/api/open/app/instance/v2"
 	// 地域列表
-	GetAreaUri = "/api/open/app/area"
+	GetAreaUri = "/api/open/app/area/v2"
 	// 开通实例
-	InstanceOpenUri = "/api/open/app/instance/open"
+	InstanceOpenUri = "/api/open/app/instance/open/v2"
 	// 续费实例
-	InstanceRenewUri = "/api/open/app/instance/renew"
+	InstanceRenewUri = "/api/open/app/instance/renew/v2"
 	// 释放实例
-	InstanceReleaseUri = "/api/open/app/instance/release"
+	InstanceReleaseUri = "/api/open/app/instance/release/v2"
 
 	//账密提取
-	DrawByPwdUri = "/api/open/app/proxy/draw/pwd"
+	DrawByPwdUri = "/api/open/app/proxy/draw/pwd/v2"
 	//获取代理信息
-	ProxyInfoUri = "/api/open/app/proxy/info"
+	ProxyInfoUri = "/api/open/app/proxy/info/v2"
 
 	//创建和修改代理用户（子账号）
-	CreateProxyUserUri = "/api/open/app/proxy/user"
+	CreateProxyUserUri = "/api/open/app/proxy/user/v2"
 
-	Encrypt_RSA = "RSA"
+	GetProductAreaListUri = "/api/open/app/product/area/v2"
+	// 添加ip白名单
+	AddIpWhiteListUri = "/api/open/app/proxy/addIpWhiteList/v2"
+	// 删除ip白名单
+	DelIpWhiteListUri = "/api/open/app/proxy/delIpWhiteList/v2"
+
+	//Api提取动态代理
+	DrawByApiUri = "/api/open/app/proxy/draw/api/v2"
+
+	//Encrypt_RSA = "RSA"
 	Encrypt_AES = "AES"
 )
 
@@ -222,6 +231,58 @@ func (c *IpvClient) InstanceRelease(params dto.AppInstanceReleaseReq) (resp *dto
 // 获取代理信息
 func (c *IpvClient) ProxyInfo(params dto.AppProxyInfoReq) (resp *dto.AppProxyInfoResp, err error) {
 	data, err := c.postData(ProxyInfoUri, params)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// 获取动态产品地区列表
+func (c *IpvClient) ProductAreaList(params dto.AppProductAreaReq) (resp *[]dto.AppProductAreaResp, err error) {
+	data, err := c.postData(GetProductAreaListUri, params)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// 添加ip白名单
+func (c *IpvClient) AddIpWhiteList(params dto.AppAddIpWhiteListReq) (resp *dto.AppAddIpWhiteListResp, err error) {
+	data, err := c.postData(AddIpWhiteListUri, params)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// 删除ip白名单
+func (c *IpvClient) DelIpWhiteList(params dto.AppDelIpWhiteListReq) (resp *dto.AppDelIpWhiteListResp, err error) {
+	data, err := c.postData(DelIpWhiteListUri, params)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// api提取动态代理
+func (c *IpvClient) DrawByApi(params dto.AppDrawByApiReq) (resp *dto.AppDrawByApiResp, err error) {
+	data, err := c.postData(DrawByApiUri, params)
 	if err != nil {
 		return nil, err
 	}

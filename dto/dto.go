@@ -281,33 +281,52 @@ type AppProxyInfoReq struct {
 
 // 代理余额信息返回
 type AppProxyInfoResp struct {
-	Used    string `json:"used" form:"used"`       //已使用
-	Total   string `json:"total" form:"total"`     //总数
-	Balance string `json:"balance" form:"balance"` //剩余
+	Used        string   `json:"used" form:"used"`               //已使用
+	Total       string   `json:"total" form:"total"`             //总数
+	Balance     string   `json:"balance" form:"balance"`         //剩余
+	IpWhiteList []string `json:"ipWhiteList" form:"ipWhiteList"` //ip白名单
 }
 
-// 分配流量
-type AppDistributeFlowReq struct {
+// AppProductAreaReq 动态产品区域列表请求
+type AppProductAreaReq struct {
+	ProductNo string `json:"productNo" form:"productNo"`              //平台产品编号
+	ProxyType int16  `json:"proxyType" form:"proxyType" label:"代理类型"` //代理类型 104=动态国外 105=动态国内
+}
+
+// AppProductAreaResp 动态产品区域列表返回
+type AppProductAreaResp struct {
+	ProductNo   string `json:"productNo"`   //平台产品编号
+	ProxyType   int16  `json:"proxyType"`   //代理类型
+	AreaCode    string `json:"areaCode"`    //区域代码（洲）
+	CountryCode string `json:"countryCode"` //国家代码
+	StateCode   string `json:"stateCode"`   //州省代码
+	CityCode    string `json:"cityCode"`    //城市代码
+	Status      int8   `json:"status"`      //状态 1=上架 -1=下架
+	RegionId    string `json:"regionId"`    //区域id
+}
+
+// AppDistributeFlowReq 分配流量
+/*type AppDistributeFlowReq struct {
 	Amount       int    `json:"amount" form:"amount"`             //流量大小M
 	MainUsername string `json:"mainUsername" form:"mainUsername"` //主账户
 	SubUsername  string `json:"subUsername" form:"subUsername"`   //子账户
 	Power        string `json:"power" form:"power"`               //幂等参数，相同参数不会重复执行
-}
+}*/
 
-type AppFlowBalanceReq struct {
+/*type AppFlowBalanceReq struct {
 	Username string `json:"username" form:"username"` //账户名
 	Main     bool   `json:"main" form:"main"`         //true 主账号
-}
+}*/
 
-type AppFlowBalanceResp struct {
+/*type AppFlowBalanceResp struct {
 	Balances []FlowBalance
-}
+}*/
 
-type FlowBalance struct {
+/*type FlowBalance struct {
 	InstanceId string
 	Balance    float64
 	Expired    int64 //有效期 为0 无期限
-}
+}*/
 
 // 异步订单，开通成功或者失败后，进行回调，回调地址为app配置的回调地址
 // 回调参数为
@@ -319,4 +338,49 @@ type FlowBalance struct {
 type NotifyRes struct {
 	Code string //成功success 多次回调上一次已经成功，第二次还是返回success
 	Msg  string
+}
+
+// AppAddIpWhiteListReq 添加ip白名单
+type AppAddIpWhiteListReq struct {
+	AppUsername string `json:"appUsername" form:"appUsername"` //渠道商主账号 必要
+	Ip          string `json:"ip" form:"ip"`                   //ip地址 必要
+	ProxyType   uint16 `json:"proxyType" form:"proxyType"`     //代理类型 可选 默认104 104=动态国外 105=动态国内
+}
+
+// AppAddIpWhiteListResp 添加ip白名单返回
+type AppAddIpWhiteListResp struct {
+	IpWhiteList []string `json:"ipWhiteList" form:"ipWhiteList"` //ip白名单
+}
+
+// AppDelIpWhiteListReq 删除ip白名单
+type AppDelIpWhiteListReq struct {
+	AppUsername string `json:"appUsername" form:"appUsername"` //渠道商主账号 必要
+	Ip          string `json:"ip" form:"ip"`                   //ip地址 必要
+	ProxyType   uint16 `json:"proxyType" form:"proxyType"`     //代理类型 可选 默认104 104=动态国外 105=动态国内
+}
+
+// AppDelIpWhiteListResp 删除ip白名单返回
+type AppDelIpWhiteListResp struct {
+	IpWhiteList []string `json:"ipWhiteList" form:"ipWhiteList"` //ip白名单
+}
+
+// AppDrawByApiReq Api提取代理请求
+type AppDrawByApiReq struct {
+	AppUsername  string `json:"appUsername" form:"appUsername"`   //渠道商主账号 必要
+	ProxyType    uint16 `json:"proxyType" form:"proxyType"`       //代理类型 必要 104=动态国外 105=动态国内
+	Num          int    `json:"num" form:"num"`                   //提取ip数量 可选 默认1
+	AddressCode  string `json:"addressCode" form:"addressCode"`   //地址代码 可选  取值 areaCode countryCode stateCode cityCode 四种之一
+	Protocol     string `json:"protocol" form:"protocol"`         //协议 可选 默认socks5  取值 socks5 http 之一
+	ReturnType   string `json:"returnType" form:"returnType"`     //数据格式 可选 默认txt  取值 txt json 之一
+	Delimiter    int    `json:"delimiter " form:"delimiter"`      //分隔符 可选 只有数据格式是txt的时候生效 默认1 (1=\r\n 2=/br 3=\r 4=\n 5=\t)
+	MaxFlowLimit int    `json:"maxFlowLimit" form:"maxFlowLimit"` //最大流量限制 可选 大于0的时候生效
+}
+
+// AppDrawByApiResp Api提取代理返回
+type AppDrawByApiResp struct {
+	List []AppDrawByApiItem `json:"list"`
+}
+
+type AppDrawByApiItem struct {
+	ProxyUrl string `json:"proxyUrl"` //提取代理Api地址
 }
