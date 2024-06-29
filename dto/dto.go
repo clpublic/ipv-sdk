@@ -214,15 +214,19 @@ type OpenParam struct {
 
 // AppInstanceRenewReq 续费代理资源请求
 type AppInstanceRenewReq struct {
-	OrderNo  string `json:"orderNo" form:"orderNo"`   //购买者订单号(渠道商订单号)
-	Instance string `json:"instance" form:"instance"` //平台实例编号
-	Duration int32  `json:"duration" form:"duration"` //可选 时长 默认1
+	OrderNo   string     `json:"orderNo" form:"orderNo"` //购买者订单号(渠道商订单号)
+	Instances []Instance `json:"instances"`              //实列
+}
+
+type Instance struct {
+	Id       string `json:"idd"`      //平台实例编号
+	Duration int32  `json:"duration"` //可选 时长 默认1
 }
 
 // AppInstanceReleaseReq 释放代理资源请求
 type AppInstanceReleaseReq struct {
-	OrderNo  string `json:"orderNo" form:"orderNo"`   //购买者订单号(渠道商订单号)
-	Instance string `json:"instance" form:"instance"` //平台实例编号
+	OrderNo   string   `json:"orderNo" form:"orderNo"`    //购买者订单号(渠道商订单号)
+	Instances []string `json:"instances" form:"instance"` //平台实例编号
 }
 
 // 释放代理资源返回

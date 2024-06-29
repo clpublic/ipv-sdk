@@ -123,8 +123,8 @@ func TestInstanceOpen(t *testing.T) {
 func TestInstanceRenew(t *testing.T) {
 	// ipidea => c_gzm9tradpjmqwg4
 	o := dto.AppInstanceRenewReq{
-		OrderNo:  getOrderNo(),
-		Instance: "c_gzqk6ykpa2qb59o", // tx=>c_gzmtux84eu8ipkq  ip90=>c_gzmk5maz55cv536  aws=>c_gzmk7asab4wy6vp jg => c_gzms93ztk8jnh0r
+		OrderNo:   getOrderNo(),
+		Instances: []dto.Instance{dto.Instance{Id: "c_gzqk6ykpa2qb59o"}}, // tx=>c_gzmtux84eu8ipkq  ip90=>c_gzmk5maz55cv536  aws=>c_gzmk7asab4wy6vp jg => c_gzms93ztk8jnh0r
 	}
 	ps, err := getClient().InstanceRenew(o)
 	if err != nil {
@@ -136,8 +136,8 @@ func TestInstanceRenew(t *testing.T) {
 
 func TestInstanceRelease(t *testing.T) {
 	o := dto.AppInstanceReleaseReq{
-		OrderNo:  getOrderNo(),
-		Instance: "c_gzraaycyuhps5pg", // c_gzmycfycqejct4m  ip90=>c_gzmk5maz55cv536 aws=>c_gzmk7asab4wy6vp
+		OrderNo:   getOrderNo(),
+		Instances: []string{"c_gzraaycyuhps5pg"}, // c_gzmycfycqejct4m  ip90=>c_gzmk5maz55cv536 aws=>c_gzmk7asab4wy6vp
 	}
 	ps, err := getClient().InstanceRelease(o)
 	if err != nil {
