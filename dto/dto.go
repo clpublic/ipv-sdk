@@ -256,8 +256,8 @@ type AppDrawByPwdReq struct {
 	//Main        bool   `json:"main" form:"main"`             //true=主账号 false=子账号  只有子账号提取
 	AppUsername  string `json:"appUsername" form:"appUsername"`   //必要（渠道商子账号名）
 	AddressCode  string `json:"addressCode" form:"addressCode"`   //地址代码 可以传 areaCode countryCode stateCode cityCode 四种之一
-	SessTime     string `json:"sessTime" form:"sessTime"`         //有效时间
-	Num          int    `json:"num" form:"num"`                   //数量
+	SessTime     string `json:"sessTime" form:"sessTime"`         //有效时间 1-120分钟 默认5分钟
+	Num          int    `json:"num" form:"num"`                   //数量 默认1
 	ProxyType    uint16 `json:"proxyType" form:"proxyType"`       //代理类型 101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
 	MaxFlowLimit int    `json:"maxFlowLimit" form:"maxFlowLimit"` //子账号最大流量限制 可选 大于0的时候生效
 }
@@ -276,7 +276,7 @@ type AppDrawByPwdItem struct {
 type AppProxyInfoReq struct {
 	Username    string `json:"username" form:"username"`       //平台主账号，选填 平台主账号和渠道商主账号两个必填一个
 	AppUsername string `json:"appUsername" form:"appUsername"` //渠道商主账号，选填 平台主账号和渠道商主账号两个必填一个
-	ProxyType   uint16 `json:"proxyType" form:"proxyType"`     //代理类型 101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
+	ProxyType   uint16 `json:"proxyType" form:"proxyType"`     //代理类型 必填 104=动态国外 105=动态国内
 }
 
 // 代理余额信息返回
@@ -302,7 +302,7 @@ type AppProductAreaResp struct {
 	StateCode   string `json:"stateCode"`   //州省代码
 	CityCode    string `json:"cityCode"`    //城市代码
 	Status      int8   `json:"status"`      //状态 1=上架 -1=下架
-	RegionId    string `json:"regionId"`    //区域id
+	Region      string `json:"region"`      //上游供应商区域
 }
 
 // 异步订单，开通成功或者失败后，进行回调，回调地址为app配置的回调地址
