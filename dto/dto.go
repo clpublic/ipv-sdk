@@ -231,10 +231,10 @@ type AppInstanceReleaseReq struct {
 
 // 释放代理资源返回
 type AppInstanceReleaseResp struct {
-	Status   int               `json:"status" form:"status"` //状态 1=待处理 2=处理中 3=处理成功 4=处理失败 5=部分完成
-	No       string            `json:"no"`                   //订单号（系统订单）
-	ThirdNo  string            `json:"thirdNo"`              //三方（购买订单）订单
-	Instance []AppInstanceResp `json:"instances"`            //订单对应实例列表
+	Status    int               `json:"status" form:"status"` //状态 1=待处理 2=处理中 3=处理成功 4=处理失败 5=部分完成
+	No        string            `json:"no"`                   //订单号（系统订单）
+	ThirdNo   string            `json:"thirdNo"`              //三方（购买订单）订单
+	Instances []AppInstanceResp `json:"instances"`            //订单对应实例列表
 }
 
 // 购买国内动态套餐请求
