@@ -64,14 +64,14 @@ type CIDRBlock struct {
 // 创建或修改主账号请求
 type AppUserReq struct {
 	AppUsername string `json:"appUsername" form:"appUsername"` //渠道商主账号 该渠道商唯一 不支持修改
-	Password    string `json:"password" form:"password"`       //主账号密码(不传随机生成) 不支持修改
+	Password    string `json:"password" form:"password"`       //主账号密码(不传随机生成)
 	Phone       string `json:"phone" form:"phone"`             //主账号手机号
 	Email       string `json:"email" form:"email"`             //主账号邮箱
-	AuthType    int8   `json:"authType" form:"authType"`       //认证类型
-	AuthName    string `json:"authName" form:"authName"`       //用户名（非必要) 不支持修改
-	No          string `json:"no" form:"no"`                   //实名证件号码(非必要) 不支持修改
+	AuthType    int8   `json:"authType" form:"authType"`       //认证类型 1=未实名 2=个人实名 3=企业实名
+	AuthName    string `json:"authName" form:"authName"`       //主账号实名认证的真实名字或者企业名
+	No          string `json:"no" form:"no"`                   //主账号实名认证的实名证件号码或者企业营业执照号码
 	VSP         uint8  `json:"vsp" form:"vsp"`                 //vsp
-	Status      int8   `json:"status" form:"status"`           // 状态 1=正常 2=禁用
+	Status      int8   `json:"status" form:"status"`           //状态 1=正常 2=禁用
 }
 
 // 创建用户返回
@@ -94,7 +94,7 @@ type AppProxyUserReq struct {
 	Status          int8   `json:"status" form:"status"`                   //状态 1=正常 2=禁用
 }
 
-// AppProxyUserResp 创建或修改代理用户返回
+// 创建或修改代理用户返回
 type AppProxyUserResp struct {
 	AppUsername string `json:"appUsername" form:"appUsername"` //渠道商子账号
 	Username    string `json:"username" form:"username"`       //平台子账号
@@ -107,16 +107,16 @@ type AppProxyUserResp struct {
 type AppAuthUserReq struct {
 	Username    string `json:"username" form:"username"`       //平台主账号 选填 平台主账号和渠道商主账号两个必填一个
 	AppUsername string `json:"appUsername" form:"appUsername"` //渠道商主账号 选填 平台主账号和渠道商主账号两个必填一个
-	AuthType    int8   `json:"authType" form:"authType"`       //认证类型
-	AuthName    string `json:"authName" form:"authName"`       //用户名
-	No          string `json:"no" form:"no"`                   //实名证件号码
+	AuthType    int8   `json:"authType" form:"authType"`       //认证类型 1 未实名 2 个人实名 3 企业实名
+	AuthName    string `json:"authName" form:"authName"`       //真实姓名或者企业名
+	No          string `json:"no" form:"no"`                   //实名证件号码或者企业营业执照号码
 	VSP         string `json:"vsp" form:"vsp"`                 //vsp
 }
 
 // 同步实名返回
 type AppAuthUserResp struct {
 	Username   string `json:"username" form:"username"`     //平台账号
-	AuthStatus int    `json:"authStatus" form:"authStatus"` //认证状态
+	AuthStatus int    `json:"authStatus" form:"authStatus"` //认证状态 1=未实名 2=个人实名 3=企业实名
 }
 
 // 获取订单列表请求
@@ -147,7 +147,7 @@ type AppGetInstanceReq struct {
 	Instances []string `json:"Instances" form:"Instances"` //平台实例编号
 }
 
-// AppInstanceResp 实列返回
+// 实例返回
 type AppInstanceResp struct {
 	InstanceNo  string    `json:"instanceNo"`  //平台实例编号（续费释放使用该编号）
 	ProxyType   uint      `json:"proxyType"`   //代理类型 101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
@@ -166,18 +166,18 @@ type AppInstanceResp struct {
 	FlowBalance float64   `json:"flowBalance"` //剩余流量
 	Status      int8      `json:"status"`      //1=待创建 2=创建中 3=运行中 6=已停止 10=关闭 11=释放
 	Renew       int8      `json:"renew"`       //1 自动续费
-	Bridges     []string  `json:"bridges"`     //桥地址
+	Bridges     []string  `json:"bridges"`     //桥地址列表
 	OpenAt      time.Time `json:"openAt"`      //开通时间
 	RenewAt     time.Time `json:"renewAt"`     //最后一次续费时间
 	ReleaseAt   time.Time `json:"releaseAt"`   //释放时间
 }
 
-// AppGetAreaReq 同步地域请求
+// 同步地域请求
 type AppGetAreaReq struct {
 	Codes []string `json:"codes" form:"codes"` //获取地域代码对应表，为null获取全部
 }
 
-// AppAreaResp 同步地域返回
+// 同步地域返回
 type AppAreaResp struct {
 	Code     string        `json:"code"`               //地域代码
 	Name     string        `json:"name"`               //地域名称
@@ -185,7 +185,7 @@ type AppAreaResp struct {
 	Children []AppAreaResp `json:"children,omitempty"` //下级地域
 }
 
-// AppStaticProxyOpenReq 开通静态资源请求
+// 开通代理资源请求
 type AppInstanceOpenReq struct {
 	Params []OpenParam
 }
@@ -212,10 +212,10 @@ type OpenParam struct {
 	ProjectId  string      `json:"projectId" form:"projectId"` //购买项目id,保留字段，后续会支持
 }
 
-// AppInstanceRenewReq 续费代理资源请求
+// 续费代理资源请求
 type AppInstanceRenewReq struct {
 	OrderNo   string     `json:"orderNo" form:"orderNo"` //购买者订单号(渠道商订单号)
-	Instances []Instance `json:"instances"`              //实列
+	Instances []Instance `json:"instances"`              //实例列表
 }
 
 type Instance struct {
@@ -223,10 +223,10 @@ type Instance struct {
 	Duration int32  `json:"duration"` //可选 时长 默认1
 }
 
-// AppInstanceReleaseReq 释放代理资源请求
+// 释放代理资源请求
 type AppInstanceReleaseReq struct {
-	OrderNo   string   `json:"orderNo" form:"orderNo"`    //购买者订单号(渠道商订单号)
-	Instances []string `json:"instances" form:"instance"` //平台实例编号
+	OrderNo   string   `json:"orderNo" form:"orderNo"`     //购买者订单号(渠道商订单号)
+	Instances []string `json:"instances" form:"instances"` //平台实例编号
 }
 
 // 释放代理资源返回
@@ -237,36 +237,17 @@ type AppInstanceReleaseResp struct {
 	Instances []AppInstanceResp `json:"instances"`            //订单对应实例列表
 }
 
-// 购买国内动态套餐请求
-type AppBuySetMealReq struct {
-	OrderNo  string `json:"orderNo" form:"orderNo"`   //购买者订单号
-	SKU      string `json:"sku" form:"sku"`           //商品skuid（如果存在sku，后面4项无意义）
-	Username string `json:"username" form:"username"` //必要（主账号或者子账号名）
-	Main     bool   `json:"main" form:"main"`         //true=主账号
-	Count    int    `json:"count" form:"count"`       //数量
-}
-
-// 购买国外动态流量请求
-type AppBuyFlowReq struct {
-	OrderNo  string `json:"orderNo" form:"orderNo"`   //购买者订单号
-	SKU      string `json:"sku" form:"sku"`           //商品skuid（如果存在sku，后面4项无意义）
-	Username string `json:"username" form:"username"` //必要（主账号或者子账号名）
-	Main     bool   `json:"main" form:"main"`         //true=主账号
-	Amount   int    `json:"amount" form:"amount"`     //流量大小M
-}
-
-// AppDrawByPwdReq 账密提取请求
+// 账密提取请求
 type AppDrawByPwdReq struct {
-	//Main        bool   `json:"main" form:"main"`             //true=主账号 false=子账号  只有子账号提取
 	AppUsername  string `json:"appUsername" form:"appUsername"`   //必要（渠道商子账号名）
 	AddressCode  string `json:"addressCode" form:"addressCode"`   //地址代码 可以传 areaCode countryCode stateCode cityCode 四种之一
 	SessTime     string `json:"sessTime" form:"sessTime"`         //有效时间 1-120分钟 默认5分钟
 	Num          int    `json:"num" form:"num"`                   //数量 默认1
-	ProxyType    uint16 `json:"proxyType" form:"proxyType"`       //代理类型 101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
+	ProxyType    uint16 `json:"proxyType" form:"proxyType"`       //代理类型 104=动态国外 105=动态国内
 	MaxFlowLimit int    `json:"maxFlowLimit" form:"maxFlowLimit"` //子账号最大流量限制 可选 大于0的时候生效
 }
 
-// AppDrawByPwdResp 账密提取返回
+// 账密提取返回
 type AppDrawByPwdResp struct {
 	List []AppDrawByPwdItem `json:"list"`
 }
@@ -276,14 +257,14 @@ type AppDrawByPwdItem struct {
 	List     []string `json:"list"`     //
 }
 
-// 代理余额信息请求
+// 动态代理余额信息请求
 type AppProxyInfoReq struct {
 	Username    string `json:"username" form:"username"`       //平台主账号，选填 平台主账号和渠道商主账号两个必填一个
 	AppUsername string `json:"appUsername" form:"appUsername"` //渠道商主账号，选填 平台主账号和渠道商主账号两个必填一个
 	ProxyType   uint16 `json:"proxyType" form:"proxyType"`     //代理类型 必填 104=动态国外 105=动态国内
 }
 
-// 代理余额信息返回
+// 动态代理余额信息返回
 type AppProxyInfoResp struct {
 	Used        string   `json:"used" form:"used"`               //已使用
 	Total       string   `json:"total" form:"total"`             //总数
@@ -291,13 +272,13 @@ type AppProxyInfoResp struct {
 	IpWhiteList []string `json:"ipWhiteList" form:"ipWhiteList"` //ip白名单
 }
 
-// AppProductAreaReq 动态产品区域列表请求
+// 动态产品区域列表请求
 type AppProductAreaReq struct {
 	ProductNo string `json:"productNo" form:"productNo"`              //平台产品编号
 	ProxyType int16  `json:"proxyType" form:"proxyType" label:"代理类型"` //代理类型 104=动态国外 105=动态国内
 }
 
-// AppProductAreaResp 动态产品区域列表返回
+// 动态产品区域列表返回
 type AppProductAreaResp struct {
 	ProductNo   string `json:"productNo"`   //平台产品编号
 	ProxyType   int16  `json:"proxyType"`   //代理类型
@@ -321,31 +302,31 @@ type NotifyRes struct {
 	Msg  string
 }
 
-// AppAddIpWhiteListReq 添加ip白名单
+// 添加ip白名单
 type AppAddIpWhiteListReq struct {
 	AppUsername string `json:"appUsername" form:"appUsername"` //渠道商主账号 必要
 	Ip          string `json:"ip" form:"ip"`                   //ip地址 必要
 	ProxyType   uint16 `json:"proxyType" form:"proxyType"`     //代理类型 可选 默认104 104=动态国外 105=动态国内
 }
 
-// AppAddIpWhiteListResp 添加ip白名单返回
+// 添加ip白名单返回
 type AppAddIpWhiteListResp struct {
 	IpWhiteList []string `json:"ipWhiteList" form:"ipWhiteList"` //ip白名单
 }
 
-// AppDelIpWhiteListReq 删除ip白名单
+// 删除ip白名单
 type AppDelIpWhiteListReq struct {
 	AppUsername string `json:"appUsername" form:"appUsername"` //渠道商主账号 必要
 	Ip          string `json:"ip" form:"ip"`                   //ip地址 必要
 	ProxyType   uint16 `json:"proxyType" form:"proxyType"`     //代理类型 可选 默认104 104=动态国外 105=动态国内
 }
 
-// AppDelIpWhiteListResp 删除ip白名单返回
+// 删除ip白名单返回
 type AppDelIpWhiteListResp struct {
 	IpWhiteList []string `json:"ipWhiteList" form:"ipWhiteList"` //ip白名单
 }
 
-// AppDrawByApiReq Api提取代理请求
+// Api提取代理请求
 type AppDrawByApiReq struct {
 	AppUsername  string `json:"appUsername" form:"appUsername"`   //渠道商主账号 必要
 	ProxyType    uint16 `json:"proxyType" form:"proxyType"`       //代理类型 必要 104=动态国外 105=动态国内
@@ -357,7 +338,7 @@ type AppDrawByApiReq struct {
 	MaxFlowLimit int    `json:"maxFlowLimit" form:"maxFlowLimit"` //最大流量限制 可选 大于0的时候生效
 }
 
-// AppDrawByApiResp Api提取代理返回
+// Api提取代理返回
 type AppDrawByApiResp struct {
 	List []AppDrawByApiItem `json:"list"`
 }
