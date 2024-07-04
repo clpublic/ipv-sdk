@@ -59,8 +59,9 @@ func TestUserAuth(t *testing.T) {
 }
 
 func TestGetOrder(t *testing.T) {
-	orders := []string{"C20240510134623046203"}
-	ps, err := getClient().GetOrder(dto.AppGetOrderReq{orders})
+	ps, err := getClient().GetOrder(dto.AppGetOrderReq{
+		OrderNo: "C20240510134623046203",
+	})
 	if err != nil {
 		t.Error(err)
 		return
@@ -94,12 +95,10 @@ func getOrderNo() string {
 func TestInstanceOpen(t *testing.T) {
 	params := []dto.OpenParam{dto.OpenParam{
 		ProductNo:    "aws_light_206", // tx_166 ip90_1189 aws_light_205  jg_226=随机地区  jg_227=安徽省芜湖市 ipidea_590=纽约 ipidea_d_283=美国
-		OrderNo:      getOrderNo(),
 		Count:        1,
 		Duration:     1,
 		Unit:         3,
 		Renew:        false,
-		Username:     "",
 		CountryCode:  "",
 		CityCode:     "",
 		ProxyType:    0,
@@ -110,7 +109,8 @@ func TestInstanceOpen(t *testing.T) {
 	},
 	}
 	o := dto.AppInstanceOpenReq{
-		Params: params,
+		AppOrderNo: getOrderNo(),
+		Params:     params,
 	}
 	ps, err := getClient().InstanceOpen(o)
 	if err != nil {
@@ -123,8 +123,8 @@ func TestInstanceOpen(t *testing.T) {
 func TestInstanceRenew(t *testing.T) {
 	// ipidea => c_gzm9tradpjmqwg4
 	o := dto.AppInstanceRenewReq{
-		OrderNo:   getOrderNo(),
-		Instances: []dto.Instance{dto.Instance{Id: "c_gzqk6ykpa2qb59o"}}, // tx=>c_gzmtux84eu8ipkq  ip90=>c_gzmk5maz55cv536  aws=>c_gzmk7asab4wy6vp jg => c_gzms93ztk8jnh0r
+		AppOrderNo: getOrderNo(),
+		Instances:  []dto.Instance{dto.Instance{InstanceNo: "c_gzqk6ykpa2qb59o"}}, // tx=>c_gzmtux84eu8ipkq  ip90=>c_gzmk5maz55cv536  aws=>c_gzmk7asab4wy6vp jg => c_gzms93ztk8jnh0r
 	}
 	ps, err := getClient().InstanceRenew(o)
 	if err != nil {
