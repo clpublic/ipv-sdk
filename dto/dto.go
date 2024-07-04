@@ -2,12 +2,12 @@ package dto
 
 import "time"
 
-// 请求统计为密文传输
+// 请求统一为密文传输
 type AppOpenReq struct {
+	ReqId   string `json:"reqId"`   // 请求id，每次生成，如果失败重复请求，保持不变
 	Version string `json:"version"` // 版本 v2
 	Encrypt string `json:"encrypt"` // 加密方式 aes,rsa（版本2以上提供，默认aes,老接口rsa）aes cbc模式
-	AppId   string `json:"appId"`   //appid，渠道商id
-	AppKey  string `json:"appKey"`  // appKey
+	AppKey  string `json:"appKey"`  // appKey 渠道商号
 	Params  string `json:"params"`  // 根据加密方式密文 转base64
 }
 
