@@ -6,50 +6,48 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/clpublic/ipv-sdk/cryptos"
+	"github.com/clpublic/ipv-sdk/dto"
 	"io"
 	"log/slog"
 	"net/http"
-
-	"github.com/clpublic/ipv-sdk/cryptos"
-	"github.com/clpublic/ipv-sdk/dto"
 )
+
+const VERSION = "v2"
 
 const (
 	// 获取产品库存
-	GetProductStockUri = "/api/open/app/product/query/v2"
+	GetProductStockUri = "/api/open/app/product/query/" + VERSION
 	//创建和修改主账户
-	CreateUserUri = "/api/open/app/user/v2"
+	CreateUserUri = "/api/open/app/user/" + VERSION
 	//同步实名
-	UserAuthUri = "/api/open/app/userAuth/v2"
+	UserAuthUri = "/api/open/app/userAuth/" + VERSION
 	// 获取订单列表
-	GetOrderUri = "/api/open/app/order"
+	GetOrderUri = "/api/open/app/order/" + VERSION
 	// 获取实列列表
-	GetInstanceUri = "/api/open/app/instance/v2"
+	GetInstanceUri = "/api/open/app/instance/" + VERSION
 	// 地域列表
-	GetAreaUri = "/api/open/app/area/v2"
+	GetAreaUri = "/api/open/app/area/" + VERSION
 	// 开通实例
-	InstanceOpenUri = "/api/open/app/instance/open/v2"
+	InstanceOpenUri = "/api/open/app/instance/open/" + VERSION
 	// 续费实例
-	InstanceRenewUri = "/api/open/app/instance/renew/v2"
+	InstanceRenewUri = "/api/open/app/instance/renew/" + VERSION
 	// 释放实例
-	InstanceReleaseUri = "/api/open/app/instance/release/v2"
-
+	InstanceReleaseUri = "/api/open/app/instance/release/" + VERSION
 	//账密提取
-	DrawByPwdUri = "/api/open/app/proxy/draw/pwd/v2"
+	DrawByPwdUri = "/api/open/app/proxy/draw/pwd/" + VERSION
 	//获取代理信息
-	ProxyInfoUri = "/api/open/app/proxy/info/v2"
-
+	ProxyInfoUri = "/api/open/app/proxy/info/" + VERSION
 	//创建和修改代理用户（子账号）
-	CreateProxyUserUri = "/api/open/app/proxy/user/v2"
-
-	GetProductAreaListUri = "/api/open/app/product/area/v2"
+	CreateProxyUserUri = "/api/open/app/proxy/user/" + VERSION
+	// 获取动态代理区域
+	GetProductAreaListUri = "/api/open/app/product/area/" + VERSION
 	// 添加ip白名单
-	AddIpWhiteListUri = "/api/open/app/proxy/addIpWhiteList/v2"
+	AddIpWhiteListUri = "/api/open/app/proxy/addIpWhiteList/" + VERSION
 	// 删除ip白名单
-	DelIpWhiteListUri = "/api/open/app/proxy/delIpWhiteList/v2"
-
+	DelIpWhiteListUri = "/api/open/app/proxy/delIpWhiteList/" + VERSION
 	//Api提取动态代理
-	DrawByApiUri = "/api/open/app/proxy/draw/api/v2"
+	DrawByApiUri = "/api/open/app/proxy/draw/api/" + VERSION
 
 	Encrypt_AES = "AES" //aes cbc模式
 )
@@ -149,13 +147,14 @@ func (c *IpvClient) DrawByPwd(params dto.AppDrawByPwdReq) (resp *dto.AppDrawByPw
 }
 
 // 获取订单信息
-func (c *IpvClient) GetOrder(params dto.AppGetOrderReq) (resp []dto.AppOrderResp, err error) {
+func (c *IpvClient) GetOrder(params dto.AppGetOrderReq) (resp *dto.AppOrderResp, err error) {
 	data, err := c.postData(GetOrderUri, params)
 	if err != nil {
 		return nil, err
 	}
 	err = json.Unmarshal(data, &resp)
 	if err != nil {
+		slog.Error("ipipv_sdk", "GetOrder-json.Unmarshal", err)
 		return
 	}
 	return
@@ -317,7 +316,7 @@ func (c *IpvClient) postData(uri string, params any) (resData []byte, err error)
 	}
 
 	aoReq := dto.AppOpenReq{
-		Version: "2.0",
+		Version: VERSION,
 		Encrypt: c.Encrypt,
 		AppKey:  c.AppId,
 		Params:  base64.StdEncoding.EncodeToString(ens),

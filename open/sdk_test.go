@@ -59,9 +59,8 @@ func TestUserAuth(t *testing.T) {
 }
 
 func TestGetOrder(t *testing.T) {
-	ps, err := getClient().GetOrder(dto.AppGetOrderReq{
-		OrderNo: "C20240510134623046203",
-	})
+	orderNo := "C20240510134623046203"
+	ps, err := getClient().GetOrder(dto.AppGetOrderReq{OrderNo: orderNo, Page: 1, PageSize: 10})
 	if err != nil {
 		t.Error(err)
 		return
