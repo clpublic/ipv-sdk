@@ -311,12 +311,12 @@ func (c *IpvClient) postData(uri string, params any) (resData []byte, err error)
 			slog.Error("ipipv_sdk", "AesEncryptCBC err", err)
 			return nil, err
 		}
-	} else {
-		ens, err = cryptos.RsaEncrypt(reqData, c.AppKey)
-		if err != nil {
-			slog.Error("ipipv_sdk", "RsaEncrypt err", err)
-			return nil, err
-		}
+		// } else {
+		// 	ens, err = cryptos.RsaEncrypt(reqData, c.AppKey)
+		// 	if err != nil {
+		// 		slog.Error("ipipv_sdk", "RsaEncrypt err", err)
+		// 		return nil, err
+		// 	}
 	}
 
 	aoReq := dto.AppOpenReq{
