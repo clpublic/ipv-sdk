@@ -11,6 +11,7 @@ type AppOpenReq struct {
 	Params  string `json:"params"`  // 根据加密方式密文 转base64
 }
 
+//统一返回
 type Res struct {
 	ReqId string `json:"reqId"`
 	Code  int    `json:"code"`
