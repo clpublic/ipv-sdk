@@ -6,12 +6,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/clpublic/ipv-sdk/cryptos"
+	"github.com/clpublic/ipv-sdk/dto"
 	"io"
 	"log/slog"
 	"net/http"
-
-	"github.com/clpublic/ipv-sdk/cryptos"
-	"github.com/clpublic/ipv-sdk/dto"
 )
 
 const VERSION = "v2"
@@ -35,21 +34,18 @@ const (
 	InstanceRenewUri = "/api/open/app/instance/renew/" + VERSION
 	// 释放实例
 	InstanceReleaseUri = "/api/open/app/instance/release/" + VERSION
-
 	//账密提取
 	DrawByPwdUri = "/api/open/app/proxy/draw/pwd/" + VERSION
 	//获取代理信息
 	ProxyInfoUri = "/api/open/app/proxy/info/" + VERSION
-
 	//创建和修改代理用户（子账号）
 	CreateProxyUserUri = "/api/open/app/proxy/user/" + VERSION
-
+	// 获取动态代理区域
 	GetProductAreaListUri = "/api/open/app/product/area/" + VERSION
 	// 添加ip白名单
 	AddIpWhiteListUri = "/api/open/app/proxy/addIpWhiteList/" + VERSION
 	// 删除ip白名单
 	DelIpWhiteListUri = "/api/open/app/proxy/delIpWhiteList/" + VERSION
-
 	//Api提取动态代理
 	DrawByApiUri = "/api/open/app/proxy/draw/api/" + VERSION
 

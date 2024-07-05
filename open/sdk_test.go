@@ -13,7 +13,7 @@ func getClient() *IpvClient {
 
 	Endpoint := "http://192.168.0.78:10888"
 	appid := "AppId"
-	appKey := `xxxxx`
+	appKey := `xxxxx` //  用于加密数据
 	client, err := NewClient(Endpoint, appid, appKey, Encrypt_AES)
 	if err != nil {
 		panic(err)
