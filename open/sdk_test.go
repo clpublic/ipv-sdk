@@ -175,3 +175,16 @@ func TestProxyInfo(t *testing.T) {
 	}
 	t.Logf("%+v", ps)
 }
+
+func TestIpvClient_ProxyFlowUseLog(t *testing.T) {
+	var req dto.AppFlowUseLogReq
+	req.AppUsername = "xxx"
+	req.StartTime = "2024-06-01"
+	req.EndTime = "2024-08-01"
+	ps, err := getClient().ProxyFlowUseLog(req)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	t.Logf("%+v", ps)
+}

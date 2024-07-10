@@ -48,6 +48,8 @@ const (
 	DelIpWhiteListUri = "/api/open/app/proxy/delIpWhiteList/" + VERSION
 	//Api提取动态代理
 	DrawByApiUri = "/api/open/app/proxy/draw/api/" + VERSION
+	// 流量使用记录列表
+	ProxyFlowUseLogUri = "/api/open/app/proxy/flow/use/log/" + VERSION
 
 	Encrypt_AES = "AES" //aes cbc模式
 )
@@ -281,6 +283,19 @@ func (c *IpvClient) DelIpWhiteList(params dto.AppDelIpWhiteListReq) (resp *dto.A
 // api提取动态代理
 func (c *IpvClient) DrawByApi(params dto.AppDrawByApiReq) (resp *dto.AppDrawByApiResp, err error) {
 	data, err := c.postData(DrawByApiUri, params)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// 流量使用记录列表
+func (c *IpvClient) ProxyFlowUseLog(params dto.AppFlowUseLogReq) (resp *dto.AppFlowUseLogResp, err error) {
+	data, err := c.postData(ProxyFlowUseLogUri, params)
 	if err != nil {
 		return nil, err
 	}
