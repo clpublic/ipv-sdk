@@ -35,6 +35,7 @@ type AppProductSyncResp struct {
 	SellLimit      int8        `json:"sellLimit"`      //必要,1=大陆可售 2=海外可售 3=无限制
 	AreaCode       string      `json:"areaCode"`       //区域code
 	CountryCode    string      `json:"countryCode"`    //必要,国家代码 3位 iso标准
+	StateCode      string      `json:"stateCode"`      //必要,州省代码 6位
 	CityCode       string      `json:"cityCode"`       //必要,城市代码 向我方提取
 	Detail         string      `json:"detail"`         //商品描述
 	CostPrice      string      `json:"costPrice"`      //必要 价格

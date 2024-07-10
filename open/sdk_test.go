@@ -9,11 +9,11 @@ import (
 
 func getClient() *IpvClient {
 	//根据实际需要 以下参数需要修改配置
-	//BaseUrl   string = "https://api.ipipv.com"
+	//Endpoint   string = "https://api.ipipv.com"
 
-	Endpoint := "http://192.168.0.78:10888"
-	appKey := "AppKey"
-	appSecret := `xxxxx`
+	Endpoint := "https://sandbox.ipipv.com"
+	appKey := "your AppKey"
+	appSecret := `your appSecret`
 	client, err := NewClient(Endpoint, appKey, appSecret, Encrypt_AES)
 	if err != nil {
 		panic(err)
