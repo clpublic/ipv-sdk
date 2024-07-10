@@ -7,7 +7,7 @@ import (
 )
 
 func TestAesEncryptCBC(t *testing.T) {
-	enM, err := AesEncryptCBC([]byte("TestMessage"), []byte("qwertyuiop123456"))
+	enM, err := AesEncryptCBC([]byte("TestMessage"), []byte("qwertyuiop123456asdfghjk"))
 	if err != nil {
 		t.Error(err)
 		return
