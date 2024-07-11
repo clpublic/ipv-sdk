@@ -9,11 +9,11 @@ import (
 
 func getClient() *IpvClient {
 	//根据实际需要 以下参数需要修改配置
-	//Endpoint   string = "https://api.ipipv.com"
+	//Endpoint := "https://api.ipipv.com"
 
-	Endpoint := "https://sandbox.ipipv.com"
-	appKey := "your AppKey"
-	appSecret := `your appSecret`
+	Endpoint := "https://sandbox.ipipv.com"         //测试环境
+	appKey := "AK20240510115408"                    //your AppKey
+	appSecret := `t84b334e1ghnw8vg7789ib3y2efd8qzb` //your appSecret
 	client, err := NewClient(Endpoint, appKey, appSecret, Encrypt_AES)
 	if err != nil {
 		panic(err)
@@ -22,7 +22,6 @@ func getClient() *IpvClient {
 }
 
 func TestGetProductStock(t *testing.T) {
-	//ps, err := GetProductStock(dto.AppProductSyncReq{ProxyType: 1})
 	ps, err := getClient().GetProductStock(dto.AppProductSyncReq{})
 	if err != nil {
 		t.Error(err)
