@@ -11,7 +11,7 @@ type AppOpenReq struct {
 	Params  string `json:"params"`  // 根据加密方式密文 转base64
 }
 
-//统一返回
+// 统一返回
 type Res struct {
 	ReqId string `json:"reqId"`
 	Code  int    `json:"code"`
@@ -357,4 +357,26 @@ type AppDrawByApiResp struct {
 
 type AppDrawByApiItem struct {
 	ProxyUrl string `json:"proxyUrl"` //提取代理Api地址
+}
+
+// 流量使用记录
+type AppFlowUseLogReq struct {
+	AppUsername string `json:"appUsername" form:"appUsername"` //渠道商主账号 必要
+	StartTime   string `json:"startTime" form:"startTime"`     //开始时间 可选 默认7天前 格式 2021-01-01 00:00:00
+	EndTime     string `json:"endTime" form:"endTime"`         //结束时间 可选当天 格式 2021-01-01 00:00:00
+	Page        int    `json:"page" form:"page"`               //页码 可选 默认1
+	PageSize    int    `json:"pageSize" form:"pageSize"`       //每页数量 可选 默认10 最大100
+}
+
+// 流量使用记录返回
+type AppFlowUseLogResp struct {
+	List    []AppFlowUseLogItem `json:"list"`    // list
+	Total   int                 `json:"total"`   // 总数量
+	CurPage int                 `json:"curPage"` // 当前页
+}
+type AppFlowUseLogItem struct {
+	Used     uint64 `json:"used"`     //已使用流量 B
+	Total    uint64 `json:"total"`    //总流量 B
+	Balance  uint64 `json:"balance"`  //剩余流量 B
+	UsedTime uint64 `json:"usedTime"` //使用时间 单位秒
 }
