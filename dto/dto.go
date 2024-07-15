@@ -206,7 +206,7 @@ type OpenParam struct {
 	ExtBandWidth int32       `json:"extBandWidth"` //额外增加带宽 单位Mbps
 	AppUsername  string      `json:"appUsername"`  //渠道商主账号，开通动态代理的时候必填(必须在平台上注册过)
 	Flow         int         `json:"flow"`         //动态流量 最大102400MB 动态必填 单位MB
-	UseBridge    uint8       `json:"useBridge"`    //1=使用桥 2=不使用桥 3=随app设置 默认3
+	UseBridge    uint8       `json:"useBridge"`    //0=随app设置 1=不使用桥 2=使用桥 默认0
 	CIDRBlocks   []CIDRBlock `json:"cidrBlocks"`   //静态购买所在网段及数量（产品有的才支持） 2024/06/27新增
 	ProjectId    string      `json:"projectId"`    //购买项目id,保留字段，后续会支持
 }
