@@ -1,3 +1,4 @@
 *.xml
 test*
 .idea
+open/sdk_local_test.go

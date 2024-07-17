@@ -68,7 +68,7 @@ func TestGetOrder(t *testing.T) {
 }
 
 func TestGetInstance(t *testing.T) {
-	instances := []string{"aaaa", "c_gzmtux84eu8ipkq"}
+	instances := []string{"c_gzmtux84eu8ipkq"}
 	ps, err := getClient().GetInstance(dto.AppGetInstanceReq{instances})
 	if err != nil {
 		t.Error(err)

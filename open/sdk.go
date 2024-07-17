@@ -6,11 +6,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/clpublic/ipv-sdk/cryptos"
-	"github.com/clpublic/ipv-sdk/dto"
 	"io"
 	"log/slog"
 	"net/http"
+
+	"github.com/clpublic/ipv-sdk/cryptos"
+	"github.com/clpublic/ipv-sdk/dto"
 )
 
 const VERSION = "v2"
@@ -307,6 +308,7 @@ func (c *IpvClient) ProxyFlowUseLog(params dto.AppFlowUseLogReq) (resp *dto.AppF
 }
 
 func (c *IpvClient) postData(uri string, params any) (resData []byte, err error) {
+	fmt.Println(c.Endpoint)
 	reqData, err := json.Marshal(params)
 	if err != nil {
 		slog.Error("ipipv_sdk", "json marshal error", err)
