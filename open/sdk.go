@@ -308,12 +308,12 @@ func (c *IpvClient) ProxyFlowUseLog(params dto.AppFlowUseLogReq) (resp *dto.AppF
 }
 
 func (c *IpvClient) postData(uri string, params any) (resData []byte, err error) {
-	fmt.Println(c.Endpoint)
 	reqData, err := json.Marshal(params)
 	if err != nil {
 		slog.Error("ipipv_sdk", "json marshal error", err)
 		return nil, err
 	}
+	fmt.Println(c.Endpoint, uri, string(reqData))
 	if c.Encrypt == "" {
 		c.Encrypt = Encrypt_AES
 	}
