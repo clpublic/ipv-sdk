@@ -18,6 +18,8 @@ const VERSION = "v2"
 
 const (
 	// 获取产品库存
+	GetAppInfoUri = "/api/open/app/info/" + VERSION
+	// 获取产品库存
 	GetProductStockUri = "/api/open/app/product/query/" + VERSION
 	//创建和修改主账户
 	CreateUserUri = "/api/open/app/user/" + VERSION
@@ -81,6 +83,21 @@ func NewClient(endpoint, appId, appKey, encrypt string) (*IpvClient, error) {
 		AppKey:   []byte(appKey),
 		Encrypt:  encrypt,
 	}, nil
+}
+
+// 获取产品库存
+func (c *IpvClient) GetAppInfo() (resp dto.AppInfoResp, err error) {
+	var data []byte
+	data, err = c.postData(GetAppInfoUri, nil)
+	if err != nil {
+		return
+	}
+	//fmt.Println(string(data))
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // 获取产品库存
@@ -308,35 +325,30 @@ func (c *IpvClient) ProxyFlowUseLog(params dto.AppFlowUseLogReq) (resp *dto.AppF
 }
 
 func (c *IpvClient) postData(uri string, params any) (resData []byte, err error) {
-	reqData, err := json.Marshal(params)
-	if err != nil {
-		slog.Error("ipipv_sdk", "json marshal error", err)
-		return nil, err
-	}
-	fmt.Println(c.Endpoint, uri, string(reqData))
-	if c.Encrypt == "" {
-		c.Encrypt = Encrypt_AES
-	}
-	var ens []byte
-	if c.Encrypt == Encrypt_AES {
-		ens, err = cryptos.AesEncryptCBC(reqData, c.AppKey)
-		if err != nil {
-			slog.Error("ipipv_sdk", "AesEncryptCBC err", err)
-			return nil, err
-		}
-		// } else {
-		// 	ens, err = cryptos.RsaEncrypt(reqData, c.AppKey)
-		// 	if err != nil {
-		// 		slog.Error("ipipv_sdk", "RsaEncrypt err", err)
-		// 		return nil, err
-		// 	}
-	}
-
 	aoReq := dto.AppOpenReq{
 		Version: VERSION,
 		Encrypt: c.Encrypt,
 		AppKey:  c.AppId,
-		Params:  base64.StdEncoding.EncodeToString(ens),
+	}
+	if params != nil {
+		reqData, err := json.Marshal(params)
+		if err != nil {
+			slog.Error("ipipv_sdk", "json marshal error", err)
+			return nil, err
+		}
+		fmt.Println(c.Endpoint, uri, string(reqData))
+		if c.Encrypt == "" {
+			c.Encrypt = Encrypt_AES
+		}
+		var ens []byte
+		if c.Encrypt == Encrypt_AES {
+			ens, err = cryptos.AesEncryptCBC(reqData, c.AppKey)
+			if err != nil {
+				slog.Error("ipipv_sdk", "AesEncryptCBC err", err)
+				return nil, err
+			}
+		}
+		aoReq.Params = base64.StdEncoding.EncodeToString(ens)
 	}
 
 	ap, err := json.Marshal(aoReq)

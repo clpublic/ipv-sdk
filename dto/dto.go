@@ -1,6 +1,8 @@
 package dto
 
-import "time"
+import (
+	"time"
+)
 
 // 请求统一为密文传输
 type AppOpenReq struct {
@@ -17,6 +19,15 @@ type Res struct {
 	Code  int    `json:"code"`
 	Msg   string `json:"msg"`
 	Data  string `json:"data"` //密文转base64
+}
+
+type AppInfoResp struct {
+	AppName     string `json:"appName"`          //应用名
+	Coin        string `json:"coin"`             //余额
+	UseBridge   int8   `json:"useBridge"`        //使用桥 1 不使用 2使用
+	CallbackUrl string `json:"callbackUrl"`      //回调地址
+	Credit      string `json:"credit,omitempty"` //授信额度
+	Status      int    `json:"status"`           // 1正常 -1禁用
 }
 
 // 获取产品列表请求

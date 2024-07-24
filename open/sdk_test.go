@@ -21,6 +21,15 @@ func getClient() *IpvClient {
 	return client
 }
 
+func TestGetAppInfo(t *testing.T) {
+	ps, err := getClient().GetAppInfo()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	t.Log(ps)
+}
+
 func TestGetProductStock(t *testing.T) {
 	ps, err := getClient().GetProductStock(dto.AppProductSyncReq{})
 	if err != nil {
