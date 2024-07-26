@@ -12,8 +12,8 @@ func getClient() *IpvClient {
 	//Endpoint := "https://api.ipipv.com"
 
 	Endpoint := "https://sandbox.ipipv.com"         //测试环境
-	appKey := "AK20240510115408"                    //your AppKey
-	appSecret := `t84b334e1ghnw8vg7789ib3y2efd8qzb` //your appSecret
+	appKey := "AK20240708150154"                    //your AppKey
+	appSecret := `xx1vsogzzvqvrgml7f6sc233p8vdqev2` //your appSecret
 	client, err := NewClient(Endpoint, appKey, appSecret, Encrypt_AES)
 	if err != nil {
 		panic(err)
@@ -31,7 +31,9 @@ func TestGetAppInfo(t *testing.T) {
 }
 
 func TestGetProductStock(t *testing.T) {
-	ps, err := getClient().GetProductStock(dto.AppProductSyncReq{})
+	ps, err := getClient().GetProductStock(dto.AppProductSyncReq{
+		ProxyType: []int{103},
+	})
 	if err != nil {
 		t.Error(err)
 		return
@@ -100,20 +102,17 @@ func getOrderNo() string {
 }
 
 func TestInstanceOpen(t *testing.T) {
-	params := []dto.OpenParam{dto.OpenParam{
-		ProductNo:    "aws_light_206", // tx_166 ip90_1189 aws_light_205  jg_226=随机地区  jg_227=安徽省芜湖市 ipidea_590=纽约 ipidea_d_283=美国
-		Count:        1,
-		Duration:     1,
-		Unit:         3,
-		Renew:        false,
-		CountryCode:  "",
-		CityCode:     "",
-		ProxyType:    0,
-		SupplierCode: "",
-		IspType:      0,
-		ExtBandWidth: 0,
-		AppUsername:  "",
-	},
+	params := []dto.OpenParam{
+		dto.OpenParam{
+			ProductNo: "ipideash_598", // tx_166 ip90_1189 aws_light_205  jg_226=随机地区  jg_227=安徽省芜湖市 ipidea_590=纽约 ipidea_d_283=美国
+			Count:     20,
+			Duration:  12,
+		},
+		dto.OpenParam{
+			ProductNo: "mb_gmhd5exp2", // tx_166 ip90_1189 aws_light_205  jg_226=随机地区  jg_227=安徽省芜湖市 ipidea_590=纽约 ipidea_d_283=美国
+			Count:     20,
+			Duration:  365,
+		},
 	}
 	o := dto.AppInstanceOpenReq{
 		AppOrderNo: getOrderNo(),

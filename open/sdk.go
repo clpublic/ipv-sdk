@@ -106,7 +106,7 @@ func (c *IpvClient) GetProductStock(params dto.AppProductSyncReq) (resp []dto.Ap
 	if err != nil {
 		return nil, err
 	}
-	//fmt.Println(string(data))
+	fmt.Println(string(data))
 	err = json.Unmarshal(data, &resp)
 	if err != nil {
 		return
@@ -336,7 +336,7 @@ func (c *IpvClient) postData(uri string, params any) (resData []byte, err error)
 			slog.Error("ipipv_sdk", "json marshal error", err)
 			return nil, err
 		}
-		fmt.Println(c.Endpoint, uri, string(reqData))
+		//fmt.Println(c.Endpoint, uri, string(reqData))
 		if c.Encrypt == "" {
 			c.Encrypt = Encrypt_AES
 		}
@@ -356,6 +356,7 @@ func (c *IpvClient) postData(uri string, params any) (resData []byte, err error)
 		slog.Error("ipipv_sdk", "json marshal error", err)
 		return nil, err
 	}
+	//fmt.Println(string(ap))
 	req, err := http.NewRequest("POST", c.Endpoint+uri, bytes.NewBuffer(ap))
 	if err != nil {
 		slog.Error("ipipv_sdk", "Error request:", err)
@@ -384,6 +385,7 @@ func (c *IpvClient) postData(uri string, params any) (resData []byte, err error)
 		slog.Error("ipipv_sdk", "Error reading response body:", err)
 		return
 	}
+	//fmt.Println(string(data))
 	var res dto.Res
 	err = json.Unmarshal(data, &res)
 	if err != nil {
