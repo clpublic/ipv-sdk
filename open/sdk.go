@@ -265,6 +265,7 @@ func (c *IpvClient) ProductAreaList(params dto.AppProductAreaReq) (resp *[]dto.A
 	if err != nil {
 		return nil, err
 	}
+	//fmt.Println(string(data))
 	err = json.Unmarshal(data, &resp)
 	if err != nil {
 		return

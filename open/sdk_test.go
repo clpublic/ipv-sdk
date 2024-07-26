@@ -195,3 +195,15 @@ func TestIpvClient_ProxyFlowUseLog(t *testing.T) {
 	}
 	t.Logf("%+v", ps)
 }
+
+func TestProductAreaList(t *testing.T) {
+	req := dto.AppProductAreaReq{
+		ProductNo: "out_dynamic_1",
+	}
+	ps, err := getClient().ProductAreaList(req)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	t.Logf("%+v", ps)
+}
