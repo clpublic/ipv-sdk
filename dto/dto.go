@@ -268,6 +268,7 @@ type AppDrawByPwdReq struct {
 	Num          int    `json:"num"`          //数量 默认1
 	ProxyType    uint16 `json:"proxyType"`    //代理类型 104=动态国外 105=动态国内
 	MaxFlowLimit int    `json:"maxFlowLimit"` //子账号最大流量限制 可选 大于0的时候生效
+	ProductNo    string `json:"productNo"`    //产品编号 不传默认以最先购买的产品提取
 }
 
 // 账密提取返回
@@ -359,6 +360,7 @@ type AppDrawByApiReq struct {
 	ReturnType   string `json:"returnType"`   //数据格式 可选 默认txt  取值 txt json 之一
 	Delimiter    int    `json:"delimiter"`    //分隔符 可选 只有数据格式是txt的时候生效 默认1 (1=\r\n 2=/br 3=\r 4=\n 5=\t)
 	MaxFlowLimit int    `json:"maxFlowLimit"` //最大流量限制 可选 大于0的时候生效
+	ProductNo    string `json:"productNo"`    //产品编号 不传默认以最先购买的产品提取
 }
 
 // Api提取代理返回
