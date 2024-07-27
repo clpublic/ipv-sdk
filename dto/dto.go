@@ -182,6 +182,7 @@ type AppInstanceResp struct {
 	OpenAt      time.Time `json:"openAt"`      //开通时间
 	RenewAt     time.Time `json:"renewAt"`     //最后成功续费时间
 	ReleaseAt   time.Time `json:"releaseAt"`   //释放成功时间
+	ProductNo   string    `json:"productNo"`   //产品编号
 }
 
 // 同步地域请求
