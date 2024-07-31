@@ -9,6 +9,7 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"time"
 
 	"github.com/clpublic/ipv-sdk/cryptos"
 	"github.com/clpublic/ipv-sdk/dto"
@@ -326,6 +327,7 @@ func (c *IpvClient) ProxyFlowUseLog(params dto.AppFlowUseLogReq) (resp *dto.AppF
 }
 
 func (c *IpvClient) postData(uri string, params any) (resData []byte, err error) {
+
 	aoReq := dto.AppOpenReq{
 		Version: VERSION,
 		Encrypt: c.Encrypt,
@@ -351,7 +353,8 @@ func (c *IpvClient) postData(uri string, params any) (resData []byte, err error)
 		}
 		aoReq.Params = base64.StdEncoding.EncodeToString(ens)
 	}
-
+	aoReq.ReqId = fmt.Sprintf("reqId_%d", time.Now().UnixNano())
+	fmt.Println("加密之后Params", aoReq.Params)
 	ap, err := json.Marshal(aoReq)
 	if err != nil {
 		slog.Error("ipipv_sdk", "json marshal error", err)
@@ -363,7 +366,9 @@ func (c *IpvClient) postData(uri string, params any) (resData []byte, err error)
 		slog.Error("ipipv_sdk", "Error request:", err)
 		return
 	}
-
+	fmt.Println("url", c.Endpoint+uri)
+	fmt.Println("req", string(ap))
+	fmt.Println("err", err)
 	// 设置必要的Headers
 	req.Header.Set("Content-Type", "application/json")
 
