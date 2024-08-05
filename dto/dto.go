@@ -287,14 +287,23 @@ type AppProxyInfoReq struct {
 	Username    string `json:"username"`    //平台主账号，选填 平台主账号和渠道商主账号两个必填一个
 	AppUsername string `json:"appUsername"` //渠道商主账号，选填 平台主账号和渠道商主账号两个必填一个
 	ProxyType   uint16 `json:"proxyType"`   //代理类型 必填 104=动态国外 105=动态国内
+	ProductNo   string `json:"productNo"`   //产品编号
 }
 
 // 动态代理余额信息返回
 type AppProxyInfoResp struct {
-	Used        string   `json:"used"`        //已使用
-	Total       string   `json:"total"`       //总数
-	Balance     string   `json:"balance"`     //剩余
+	Used        string                `json:"used"`        //已使用 单位M
+	Total       string                `json:"total"`       //购买总数 单位M
+	Balance     string                `json:"balance"`     //剩余 单位M
+	IpWhiteList []string              `json:"ipWhiteList"` //ip白名单
+	List        []AppProxyInfoProduct `json:"list"`        //产品列表数据
+}
+type AppProxyInfoProduct struct {
+	Used        string   `json:"used"`        //已使用  单位M
+	Total       string   `json:"total"`       //总数   单位M
+	Balance     string   `json:"balance"`     //剩余 单位M
 	IpWhiteList []string `json:"ipWhiteList"` //ip白名单
+	ProductNo   string   `json:"productNo"`   //产品编号
 }
 
 // 动态产品区域列表请求
@@ -378,6 +387,7 @@ type AppFlowUseLogReq struct {
 	AppUsername string `json:"appUsername" form:"appUsername"` //渠道商主账号 必要
 	StartTime   string `json:"startTime" form:"startTime"`     //开始时间 可选 默认7天前 格式 2021-01-01 00:00:00
 	EndTime     string `json:"endTime" form:"endTime"`         //结束时间 可选当天 格式 2021-01-01 00:00:00
+	ProductNo   string `json:"productNo"`                      //产品编号 可选
 	Page        int    `json:"page" form:"page"`               //页码 可选 默认1
 	PageSize    int    `json:"pageSize" form:"pageSize"`       //每页数量 可选 默认10 最大100
 }
@@ -389,8 +399,9 @@ type AppFlowUseLogResp struct {
 	CurPage int                 `json:"curPage"` // 当前页
 }
 type AppFlowUseLogItem struct {
-	Used     uint64 `json:"used"`     //已使用流量 B
-	Total    uint64 `json:"total"`    //总流量 B
-	Balance  uint64 `json:"balance"`  //剩余流量 B
-	UsedTime uint64 `json:"usedTime"` //使用时间 单位秒
+	Used      uint64 `json:"used"`      //已使用流量 B
+	Total     uint64 `json:"total"`     //总流量 B
+	Balance   uint64 `json:"balance"`   //剩余流量 B
+	UsedTime  uint64 `json:"usedTime"`  //使用时间 单位秒
+	ProductNo string `json:"productNo"` //产品编号
 }
