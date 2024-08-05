@@ -292,10 +292,18 @@ type AppProxyInfoReq struct {
 
 // 动态代理余额信息返回
 type AppProxyInfoResp struct {
-	Used        string   `json:"used"`        //已使用
-	Total       string   `json:"total"`       //总数
-	Balance     string   `json:"balance"`     //剩余
+	Used        string                `json:"used"`        //已使用 单位M
+	Total       string                `json:"total"`       //购买总数 单位M
+	Balance     string                `json:"balance"`     //剩余 单位M
+	IpWhiteList []string              `json:"ipWhiteList"` //ip白名单
+	List        []AppProxyInfoProduct `json:"list"`        //产品列表数据
+}
+type AppProxyInfoProduct struct {
+	Used        string   `json:"used"`        //已使用  单位M
+	Total       string   `json:"total"`       //总数   单位M
+	Balance     string   `json:"balance"`     //剩余 单位M
 	IpWhiteList []string `json:"ipWhiteList"` //ip白名单
+	ProductNo   string   `json:"productNo"`   //产品编号
 }
 
 // 动态产品区域列表请求
