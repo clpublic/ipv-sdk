@@ -341,6 +341,7 @@ type AppAddIpWhiteListReq struct {
 	AppUsername string `json:"appUsername"` //渠道商主账号 必要
 	Ip          string `json:"ip"`          //ip地址 必要
 	ProxyType   uint16 `json:"proxyType"`   //代理类型 可选 默认104 104=动态国外 105=动态国内
+	ProductNo   string `json:"productNo"`   //产品编号
 }
 
 // 添加ip白名单返回
@@ -353,6 +354,7 @@ type AppDelIpWhiteListReq struct {
 	AppUsername string `json:"appUsername"` //渠道商主账号 必要
 	Ip          string `json:"ip"`          //ip地址 必要
 	ProxyType   uint16 `json:"proxyType"`   //代理类型 可选 默认104 104=动态国外 105=动态国内
+	ProductNo   string `json:"productNo"`   //产品编号
 }
 
 // 删除ip白名单返回
