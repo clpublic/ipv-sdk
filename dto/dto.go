@@ -65,6 +65,8 @@ type AppProductSyncResp struct {
 	Enable         int8        `json:"enable"`         //是否可以购买 1可以
 	SupplierCode   string      `json:"supplierCode"`   //供应商代码
 	CIDRBlocks     []CIDRBlock `json:"cidrBlocks"`     //支持网段及数量 新增 2024/06/27
+	DrawType       int         `json:"drawType"`       //代理提取方式 0=不需要提取(静态代理) 1=白名单提取(api) 2=账密提取 3=都支持 默认为0 新增于2024/08/12
+	RefundDuration int         `json:"refundDuration"` //退款时效 单位秒 0=不支持退款 大于0表示从创建订单之后多少秒内可以退款 默认为0 新增于2024/08/12
 }
 
 // 新增 2024/06/27
