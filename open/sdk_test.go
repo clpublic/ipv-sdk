@@ -98,7 +98,7 @@ func TestGetArea(t *testing.T) {
 }
 
 func getOrderNo() string {
-	return "TEST" + time.Now().Format("20060102150405")
+	return "SDK_TEST" + time.Now().Format("20060102150405")
 }
 
 func TestInstanceOpen(t *testing.T) {
