@@ -67,6 +67,8 @@ type AppProductSyncResp struct {
 	CIDRBlocks     []CIDRBlock `json:"cidrBlocks"`     //支持网段及数量 新增 2024/06/27
 	DrawType       int         `json:"drawType"`       //代理提取方式 0=不需要提取(静态代理) 1=白名单提取(api) 2=账密提取 3=都支持 默认为0 新增于2024/08/12
 	RefundDuration int         `json:"refundDuration"` //退款时效 单位秒 0=不支持退款 大于0表示从创建订单之后多少秒内可以退款 默认为0 新增于2024/08/12
+	IpCount        int         `json:"ipCount"`        //ip数量 动态代理按照ip数量购买 该字段大于0 默认为0 新增于2024/08/26
+	IpDuration     int         `json:"ipDuration"`     //ip时长 动态代理按照ip数量购买 单位分钟 该字段大于0 默认为0 新增于2024/08/26
 }
 
 // 新增 2024/06/27
@@ -215,11 +217,11 @@ type OpenParam struct {
 	Unit         int8        `json:"unit"`         //单位 1=天 2=周(7天) 3=月(自然月) 4=年(自然年365，366) 10=无限制
 	IspType      int         `json:"ispType"`      //isp类型 1=单isp 2=双isp
 	Count        int         `json:"count"`        //购买数量 （实例个数）静态必填 默认1 一次最大20
-	Duration     int32       `json:"duration"`     //必要 时长 默认1 为Unit的时长
+	Duration     int32       `json:"duration"`     //必要 时长 默认1 为Unit的时长 此处不是指的绝对时长 指的是x个单位的unit时长
 	Renew        bool        `json:"renew"`        //是否续费 1续费 默认0
 	ExtBandWidth int32       `json:"extBandWidth"` //额外增加带宽 单位Mbps
 	AppUsername  string      `json:"appUsername"`  //渠道商主账号，开通动态代理的时候必填(必须在平台上注册过)
-	Flow         int         `json:"flow"`         //动态流量 最大102400MB 动态必填 单位MB
+	Flow         int         `json:"flow"`         //动态流量 最大102400MB 动态流量必填 单位MB
 	UseBridge    uint8       `json:"useBridge"`    //0=随app设置 1=不使用桥 2=使用桥 默认0
 	CIDRBlocks   []CIDRBlock `json:"cidrBlocks"`   //静态购买所在网段及数量（产品有的才支持） 2024/06/27新增
 	ProjectId    string      `json:"projectId"`    //购买项目id,保留字段，后续会支持
@@ -240,7 +242,7 @@ type AppInstanceRenewReq struct {
 
 type Instance struct {
 	InstanceNo string `json:"instanceNo"` //平台实例编号
-	Duration   int32  `json:"duration"`   //可选 时长 默认1
+	Duration   int32  `json:"duration"`   //可选 时长 续费的时候默认是购买的时候的时长
 }
 
 // 续费代理资源返回
@@ -271,7 +273,7 @@ type AppDrawByPwdReq struct {
 	Num          int    `json:"num"`          //数量 默认1
 	ProxyType    uint16 `json:"proxyType"`    //代理类型 104=动态国外 105=动态国内
 	MaxFlowLimit int    `json:"maxFlowLimit"` //子账号最大流量限制 可选 大于0的时候生效
-	ProductNo    string `json:"productNo"`    //产品编号 不传默认以最先购买的产品提取
+	ProductNo    string `json:"productNo"`    //产品编号 必要
 }
 
 // 账密提取返回
@@ -289,7 +291,7 @@ type AppProxyInfoReq struct {
 	Username    string `json:"username"`    //平台主账号，选填 平台主账号和渠道商主账号两个必填一个
 	AppUsername string `json:"appUsername"` //渠道商主账号，选填 平台主账号和渠道商主账号两个必填一个
 	ProxyType   uint16 `json:"proxyType"`   //代理类型 必填 104=动态国外 105=动态国内
-	ProductNo   string `json:"productNo"`   //产品编号
+	ProductNo   string `json:"productNo"`   //产品编号 必填
 }
 
 // 动态代理余额信息返回
@@ -306,6 +308,8 @@ type AppProxyInfoProduct struct {
 	Balance     string   `json:"balance"`     //剩余 单位M
 	IpWhiteList []string `json:"ipWhiteList"` //ip白名单
 	ProductNo   string   `json:"productNo"`   //产品编号
+	IpUsed      int      `json:"ipUsed"`      //已使用ip 单位个
+	IpTotal     int      `json:"ipTotal"`     //总数ip   单位个
 }
 
 // 动态产品区域列表请求
@@ -316,14 +320,15 @@ type AppProductAreaReq struct {
 
 // 动态产品区域列表返回
 type AppProductAreaResp struct {
-	ProductNo   string `json:"productNo"`   //平台产品编号
-	ProxyType   int16  `json:"proxyType"`   //代理类型
-	AreaCode    string `json:"areaCode"`    //区域代码（洲）
-	CountryCode string `json:"countryCode"` //国家代码
-	StateCode   string `json:"stateCode"`   //州省代码
-	CityCode    string `json:"cityCode"`    //城市代码
-	Status      int8   `json:"status"`      //状态 1=上架 -1=下架
-	Region      string `json:"region"`      //上游供应商区域
+	ProductNo    string `json:"productNo"`    //平台产品编号
+	ProxyType    int16  `json:"proxyType"`    //代理类型
+	AreaCode     string `json:"areaCode"`     //区域代码（洲）
+	CountryCode  string `json:"countryCode"`  //国家代码
+	StateCode    string `json:"stateCode"`    //州省代码
+	CityCode     string `json:"cityCode"`     //城市代码
+	Status       int8   `json:"status"`       //状态 1=上架 -1=下架
+	Region       string `json:"region"`       //上游供应商区域
+	SupplierCode string `json:"supplierCode"` //供应商code
 }
 
 // 异步订单，开通成功或者失败后，进行回调，回调地址为app配置的回调地址
@@ -374,7 +379,7 @@ type AppDrawByApiReq struct {
 	ReturnType   string `json:"returnType"`   //数据格式 可选 默认txt  取值 txt json 之一
 	Delimiter    int    `json:"delimiter"`    //分隔符 可选 只有数据格式是txt的时候生效 默认1 (1=\r\n 2=/br 3=\r 4=\n 5=\t)
 	MaxFlowLimit int    `json:"maxFlowLimit"` //最大流量限制 可选 大于0的时候生效
-	ProductNo    string `json:"productNo"`    //产品编号 不传默认以最先购买的产品提取
+	ProductNo    string `json:"productNo"`    //产品编号 必要
 }
 
 // Api提取代理返回
