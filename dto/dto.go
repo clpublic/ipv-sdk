@@ -21,6 +21,12 @@ type Res struct {
 	Data  string `json:"data"` //密文转base64
 }
 
+// 获取产品列表请求
+type AppProductSyncReq struct {
+	ProxyType []int  `json:"proxyType"` //代理类型 可选  101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
+	ProductNo string `json:"productNo"` //产品编号 可选 支持单独更新一个产品信息
+}
+
 type AppInfoResp struct {
 	AppName     string `json:"appName"`          //应用名
 	Coin        string `json:"coin"`             //余额
@@ -30,14 +36,9 @@ type AppInfoResp struct {
 	Status      int    `json:"status"`           // 1正常 -1禁用
 }
 
-// 获取产品列表请求
-type AppProductSyncReq struct {
-	ProxyType []int `json:"proxyType" form:"proxyType"` //代理类型  101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
-}
-
 // 获取产品列表返回 （明文返回）
 type AppProductSyncResp struct {
-	ProductNo      string      `json:"productNo" `     //必要，产品Id 保持唯一
+	ProductNo      string      `json:"productNo"`      //必要，产品Id 保持唯一
 	ProductName    string      `json:"productName"`    //必要,商品名
 	ProxyType      int16       `json:"proxyType"`      //必要, 101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
 	UseType        string      `json:"useType"`        //必要, ,分割  1=账密 2=白名单 3=uuid
@@ -191,7 +192,7 @@ type AppInstanceResp struct {
 
 // 同步地域请求
 type AppGetAreaReq struct {
-	Codes []string `json:"codes"` //获取地域代码对应表，为null获取全部
+	Codes []string `json:"codes"` //获取地域代码对应列表，为null获取全部
 }
 
 // 同步地域返回
@@ -211,8 +212,8 @@ type AppInstanceOpenReq struct {
 type OpenParam struct {
 	ProductNo    string      `json:"productNo"`    //商品编号（如果存在，后面6项无意义）
 	ProxyType    uint16      `json:"proxyType"`    //代理类型 101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
-	CountryCode  string      `json:"countryCode"`  //国家代码
-	CityCode     string      `json:"cityCode"`     //城市代码
+	CountryCode  string      `json:"countryCode"`  //国家代码 如果传了商品编号 此项无意义
+	CityCode     string      `json:"cityCode"`     //城市代码 如果传了商品编号 此项无意义
 	SupplierCode string      `json:"supplierCode"` //供应商代码（可为null,随机分配）
 	Unit         int8        `json:"unit"`         //单位 1=天 2=周(7天) 3=月(自然月) 4=年(自然年365，366) 10=无限制
 	IspType      int         `json:"ispType"`      //isp类型 1=单isp 2=双isp
@@ -303,9 +304,9 @@ type AppProxyInfoResp struct {
 	List []AppProxyInfoProduct `json:"list"` //产品列表数据
 }
 type AppProxyInfoProduct struct {
-	Used        string   `json:"used"`        //已使用  单位M
+	Used        string   `json:"used"`        //已使用 单位M
 	Total       string   `json:"total"`       //总数   单位M
-	Balance     string   `json:"balance"`     //剩余 单位M
+	Balance     string   `json:"balance"`     //剩余   单位M
 	IpWhiteList []string `json:"ipWhiteList"` //ip白名单
 	ProductNo   string   `json:"productNo"`   //产品编号
 	IpUsed      int      `json:"ipUsed"`      //已使用ip 单位个
@@ -393,12 +394,12 @@ type AppDrawByApiItem struct {
 
 // 流量使用记录
 type AppFlowUseLogReq struct {
-	AppUsername string `json:"appUsername" form:"appUsername"` //渠道商主账号 必要
-	StartTime   string `json:"startTime" form:"startTime"`     //开始时间 可选 默认7天前 格式 2021-01-01 00:00:00
-	EndTime     string `json:"endTime" form:"endTime"`         //结束时间 可选当天 格式 2021-01-01 00:00:00
-	ProductNo   string `json:"productNo"`                      //产品编号 可选
-	Page        int    `json:"page" form:"page"`               //页码 可选 默认1
-	PageSize    int    `json:"pageSize" form:"pageSize"`       //每页数量 可选 默认10 最大100
+	AppUsername string `json:"appUsername"` //渠道商主账号 必要
+	StartTime   string `json:"startTime"`   //开始时间 可选 默认7天前 格式 2021-01-01 00:00:00
+	EndTime     string `json:"endTime"`     //结束时间 可选当天 格式 2021-01-01 00:00:00
+	ProductNo   string `json:"productNo"`   //产品编号
+	Page        int    `json:"page"`        //页码 可选 默认1
+	PageSize    int    `json:"pageSize"`    //每页数量 可选 默认10 最大100
 }
 
 // 流量使用记录返回
@@ -413,4 +414,22 @@ type AppFlowUseLogItem struct {
 	Balance   int64  `json:"balance"`   //剩余流量 B
 	UsedTime  uint64 `json:"usedTime"`  //使用时间 单位秒
 	ProductNo string `json:"productNo"` //产品编号
+}
+
+// 同步城市列表请求
+type AppCityListReq struct {
+	Codes []string `json:"codes" form:"codes"` //城市代码列表，为null获取全部
+}
+
+// 同步城市列表返回
+type AppCityListResp struct {
+	CityCode    string `json:"cityCode"`    //城市代码
+	CityName    string `json:"cityName"`    //城市名称
+	StateCode   string `json:"stateCode"`   //州、省代码
+	StateName   string `json:"stateName"`   //州、省名称
+	CountryCode string `json:"countryCode"` //国家代码
+	CountryName string `json:"countryName"` //国家名称
+	AreaCode    string `json:"areaCode"`    //洲代码
+	AreaName    string `json:"areaName"`    //洲名称
+	Status      int    `json:"status"`      //状态 1=上架 -1=下架
 }

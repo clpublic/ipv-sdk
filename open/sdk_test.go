@@ -208,3 +208,15 @@ func TestProductAreaList(t *testing.T) {
 	}
 	t.Logf("%+v", ps)
 }
+
+func TestIpvClient_GetCityList(t *testing.T) {
+	req := dto.AppCityListReq{
+		Codes: nil,
+	}
+	ps, err := getClient().GetCityList(req)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	t.Logf("%+v", ps)
+}
