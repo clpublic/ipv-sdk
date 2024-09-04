@@ -54,6 +54,8 @@ const (
 	DrawByApiUri = "/api/open/app/proxy/draw/api/" + VERSION
 	// 流量使用记录列表
 	ProxyFlowUseLogUri = "/api/open/app/proxy/flow/use/log/" + VERSION
+	// 城市列表
+	GetCityListUri = "/api/open/app/city/list/" + VERSION
 
 	Encrypt_AES = "AES" //aes cbc模式
 )
@@ -197,6 +199,20 @@ func (c *IpvClient) GetInstance(params dto.AppGetInstanceReq) (resp []dto.AppIns
 // 获取地域信息
 func (c *IpvClient) GetArea(params dto.AppGetAreaReq) (resp []dto.AppAreaResp, err error) {
 	data, err := c.postData(GetAreaUri, params)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println(string(data))
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// 获取城市列表
+func (c *IpvClient) GetCityList(params dto.AppCityListReq) (resp []dto.AppCityListResp, err error) {
+	data, err := c.postData(GetCityListUri, params)
 	if err != nil {
 		return nil, err
 	}
