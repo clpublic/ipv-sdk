@@ -9,6 +9,7 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/clpublic/ipv-sdk/cryptos"
@@ -80,6 +81,7 @@ func NewClient(endpoint, appId, appKey, encrypt string) (*IpvClient, error) {
 	if encrypt == "" {
 		encrypt = Encrypt_AES
 	}
+	endpoint = strings.TrimSuffix(endpoint, "/")
 	return &IpvClient{
 		Endpoint: endpoint,
 		AppId:    appId,
@@ -109,7 +111,7 @@ func (c *IpvClient) GetProductStock(params dto.AppProductSyncReq) (resp []dto.Ap
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(string(data))
+	//fmt.Println(string(data))
 	err = json.Unmarshal(data, &resp)
 	if err != nil {
 		return
@@ -202,7 +204,7 @@ func (c *IpvClient) GetArea(params dto.AppGetAreaReq) (resp []dto.AppAreaResp, e
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(string(data))
+	//fmt.Println(string(data))
 	err = json.Unmarshal(data, &resp)
 	if err != nil {
 		return
@@ -216,7 +218,7 @@ func (c *IpvClient) GetCityList(params dto.AppCityListReq) (resp []dto.AppCityLi
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(string(data))
+	//fmt.Println(string(data))
 	err = json.Unmarshal(data, &resp)
 	if err != nil {
 		return
@@ -355,6 +357,7 @@ func (c *IpvClient) postData(uri string, params any) (resData []byte, err error)
 			slog.Error("ipipv_sdk", "json marshal error", err)
 			return nil, err
 		}
+		slog.Debug("[ipipv_sdk]", "param", string(reqData))
 		//fmt.Println(c.Endpoint, uri, string(reqData))
 		if c.Encrypt == "" {
 			c.Encrypt = Encrypt_AES
@@ -370,21 +373,27 @@ func (c *IpvClient) postData(uri string, params any) (resData []byte, err error)
 		aoReq.Params = base64.StdEncoding.EncodeToString(ens)
 	}
 	aoReq.ReqId = fmt.Sprintf("reqId_%d", time.Now().UnixNano())
-	fmt.Println("加密之后Params", aoReq.Params)
+	//fmt.Println("加密之后Params", aoReq.Params)
+
 	ap, err := json.Marshal(aoReq)
 	if err != nil {
 		slog.Error("ipipv_sdk", "json marshal error", err)
 		return nil, err
 	}
+
+	slog.Debug("[ipipv_sdk]", "req", string(ap))
+
 	//fmt.Println(string(ap))
 	req, err := http.NewRequest("POST", c.Endpoint+uri, bytes.NewBuffer(ap))
 	if err != nil {
 		slog.Error("ipipv_sdk", "Error request:", err)
 		return
 	}
-	fmt.Println("url", c.Endpoint+uri)
-	fmt.Println("req", string(ap))
-	fmt.Println("err", err)
+
+	slog.Debug("[ipipv_sdk]", "endpoint", c.Endpoint+uri)
+	// fmt.Println("url", c.Endpoint+uri)
+	// fmt.Println("req", string(ap))
+	// fmt.Println("err", err)
 	// 设置必要的Headers
 	req.Header.Set("Content-Type", "application/json")
 
@@ -407,6 +416,7 @@ func (c *IpvClient) postData(uri string, params any) (resData []byte, err error)
 		slog.Error("ipipv_sdk", "Error reading response body:", err)
 		return
 	}
+	slog.Debug("[ipipv_sdk]", "result", string(data))
 	//fmt.Println(string(data))
 	var res dto.Res
 	err = json.Unmarshal(data, &res)
