@@ -397,7 +397,7 @@ type AppFlowUseLogReq struct {
 	AppUsername string `json:"appUsername"` //渠道商主账号 必要
 	StartTime   string `json:"startTime"`   //开始时间 可选 默认7天前 格式 2021-01-01 00:00:00
 	EndTime     string `json:"endTime"`     //结束时间 可选当天 格式 2021-01-01 00:00:00
-	ProductNo   string `json:"productNo"`   //产品编号
+	ProductNo   string `json:"productNo"`   //产品编号 必须
 	Page        int    `json:"page"`        //页码 可选 默认1
 	PageSize    int    `json:"pageSize"`    //每页数量 可选 默认10 最大100
 }
@@ -432,4 +432,19 @@ type AppCityListResp struct {
 	AreaCode    string `json:"areaCode"`    //洲代码
 	AreaName    string `json:"areaName"`    //洲名称
 	Status      int    `json:"status"`      //状态 1=上架 -1=下架
+}
+
+// 动态代理回收请求
+type AppProxyReturnReq struct {
+	AppUsername string `json:"appUsername"` //渠道商主账号，必填
+	ProxyType   uint16 `json:"proxyType"`   //代理类型 必填 104=动态国外 105=动态国内
+	ProductNo   string `json:"productNo"`   //产品编号 必填
+	IpNum       int64  `json:"ipNum"`       //回收ip数量  单位个  产品如果是按照ip数量购买 使用该字段
+	FlowNum     int64  `json:"flowNum"`     //回收流量数量  单位M  产品如果是按照流量购买 使用该字段
+	Remark      string `json:"remark"`      //备注 最多250个字符
+}
+
+// 动态代理回收返回
+type AppProxyReturnResp struct {
+	ReturnAmount float64 `json:"returnAmount"` //回收代理退还金额 单位元
 }

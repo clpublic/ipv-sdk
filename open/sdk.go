@@ -58,6 +58,9 @@ const (
 	// 城市列表
 	GetCityListUri = "/api/open/app/city/list/" + VERSION
 
+	// 动态代理回收
+	DynamicProxyReturnUri = "/api/open/app/proxy/return/" + VERSION
+
 	Encrypt_AES = "AES" //aes cbc模式
 )
 
@@ -334,6 +337,19 @@ func (c *IpvClient) DrawByApi(params dto.AppDrawByApiReq) (resp *dto.AppDrawByAp
 // 流量使用记录列表
 func (c *IpvClient) ProxyFlowUseLog(params dto.AppFlowUseLogReq) (resp *dto.AppFlowUseLogResp, err error) {
 	data, err := c.postData(ProxyFlowUseLogUri, params)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// 动态代理回收
+func (c *IpvClient) DynamicProxyReturn(params dto.AppProxyReturnReq) (resp *dto.AppProxyReturnResp, err error) {
+	data, err := c.postData(DynamicProxyReturnUri, params)
 	if err != nil {
 		return nil, err
 	}
