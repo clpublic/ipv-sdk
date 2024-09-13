@@ -237,3 +237,21 @@ func TestIpvClient_DynamicProxyReturn(t *testing.T) {
 	}
 	t.Logf("%+v", ps)
 }
+
+func TestIpvClient_CreateProxyUser(t *testing.T) {
+	req := dto.AppProxyUserReq{
+		AppUsername:     "",
+		Password:        "",
+		LimitFlow:       0,
+		MainUsername:    "",
+		AppMainUsername: "",
+		Remark:          "",
+		Status:          1,
+	}
+	ps, err := getClient().CreateProxyUser(req)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	t.Logf("%+v", ps)
+}
