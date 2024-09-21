@@ -23,8 +23,14 @@ type Res struct {
 
 // 获取产品列表请求
 type AppProductSyncReq struct {
-	ProxyType []int  `json:"proxyType"` //代理类型 可选  101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
-	ProductNo string `json:"productNo"` //产品编号 可选 支持单独更新一个产品信息
+	ProxyType    []int  `json:"proxyType"`    //代理类型 可选  101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
+	ProductNo    string `json:"productNo"`    //产品编号 可选
+	CountryCode  string `json:"countryCode"`  //国家代码 可选
+	CityCode     string `json:"cityCode"`     //城市代码 可选
+	SupplierCode string `json:"supplierCode"` //供应商代码 可选
+	Unit         int8   `json:"unit"`         //时长单位 可选 1=天 2=周(7天) 3=月(自然月) 4=年(自然年365，366) 10=无限制
+	IspType      int    `json:"ispType"`      //isp类型 可选 1=单isp 2=双isp
+	Duration     int32  `json:"duration"`     //相对于时长单位的最小购买时长 可选
 }
 
 type AppInfoResp struct {
@@ -75,8 +81,9 @@ type AppProductSyncResp struct {
 // 新增 2024/06/27
 // 网段
 type CIDRBlock struct {
-	CIDR  string `json:"cidr"` //网段 192.168.0.0/24 172.16.0.0/16 10.0.0.0/8
-	Count int    `json:"count"`
+	CIDR  string `json:"cidr"`  // 网段 192.168.0.0/24 172.16.0.0/16 10.0.0.0/8
+	Count int    `json:"count"` // 网段ip数量 购买代理的时候如果传了网段 该字段必传
+	Asn   string `json:"asn"`   // 该网段属于哪个asn 购买代理的时候可选 新增 2024/09/21
 }
 
 // 创建或修改主账号请求
@@ -210,22 +217,23 @@ type AppInstanceOpenReq struct {
 }
 
 type OpenParam struct {
-	ProductNo    string      `json:"productNo"`    //商品编号（如果存在，后面6项无意义）
-	ProxyType    uint16      `json:"proxyType"`    //代理类型 101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
-	CountryCode  string      `json:"countryCode"`  //国家代码 如果传了商品编号 此项无意义
-	CityCode     string      `json:"cityCode"`     //城市代码 如果传了商品编号 此项无意义
-	SupplierCode string      `json:"supplierCode"` //供应商代码（可为null,随机分配）
-	Unit         int8        `json:"unit"`         //单位 1=天 2=周(7天) 3=月(自然月) 4=年(自然年365，366) 10=无限制
-	IspType      int         `json:"ispType"`      //isp类型 1=单isp 2=双isp
+	ProductNo    string      `json:"productNo"`    //产品编号（如果存在，后面7项无意义）
+	ProxyType    uint16      `json:"proxyType"`    //代理类型（匹配产品用，如果产品编号有值忽略该项） 101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
+	CountryCode  string      `json:"countryCode"`  //国家代码（匹配产品用，如果产品编号有值忽略该项）
+	CityCode     string      `json:"cityCode"`     //城市代码（匹配产品用，如果产品编号有值忽略该项）
+	SupplierCode string      `json:"supplierCode"` //供应商代码（匹配产品用，如果产品编号有值忽略该项）（可为null,随机分配）
+	Unit         int8        `json:"unit"`         //单位（匹配产品用，如果产品编号有值忽略该项） 1=天 2=周(7天) 3=月(自然月) 4=年(自然年365，366) 10=无限制
+	IspType      int         `json:"ispType"`      //isp类型（匹配产品用，如果产品编号有值忽略该项） 1=单isp 2=双isp
 	Count        int         `json:"count"`        //购买数量 （实例个数）静态必填 默认1 一次最大20
-	Duration     int32       `json:"duration"`     //必要 时长 默认1 为Unit的时长 此处不是指的绝对时长 指的是x个单位的unit时长
+	Duration     int32       `json:"duration"`     //相对时长 必要 默认1 为Unit的时长 此处不是指的绝对时长 指的是相对x个时间单位(unit)的时长 2024-9-21改为产品定义的时长单位 （匹配产品用，如果产品编号有值忽略该项）  之前对接的定义不变
 	Renew        bool        `json:"renew"`        //是否续费 1续费 默认0
 	ExtBandWidth int32       `json:"extBandWidth"` //额外增加带宽 单位Mbps
 	AppUsername  string      `json:"appUsername"`  //渠道商主账号，开通动态代理的时候必填(必须在平台上注册过)
 	Flow         int         `json:"flow"`         //动态流量 最大102400MB 动态流量必填 单位MB
-	UseBridge    uint8       `json:"useBridge"`    //0=随app设置 1=不使用桥 2=使用桥 默认0
+	UseBridge    uint8       `json:"useBridge"`    //是否使用桥 0=随app设置 1=不使用桥 2=使用桥 默认0
 	CIDRBlocks   []CIDRBlock `json:"cidrBlocks"`   //静态购买所在网段及数量（产品有的才支持） 2024/06/27新增
-	ProjectId    string      `json:"projectId"`    //购买项目id,保留字段，后续会支持
+	ProjectId    string      `json:"projectId"`    //购买项目id,保留字段，后续支持
+	CycleTimes   int32       `json:"cycleTimes"`   //购买时长周期数，此字段对有时长的产品有意义，默认1 表示产品的unit * duration 如果该字段大于0 duration字段不作为购买时长使用 2024/09/21新增
 }
 
 // 开通代理资源返回
