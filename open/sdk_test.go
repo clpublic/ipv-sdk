@@ -220,3 +220,38 @@ func TestIpvClient_GetCityList(t *testing.T) {
 	}
 	t.Logf("%+v", ps)
 }
+
+func TestIpvClient_DynamicProxyReturn(t *testing.T) {
+	req := dto.AppProxyReturnReq{
+		AppUsername: "",
+		ProxyType:   104,
+		ProductNo:   "out_dynamic_1",
+		IpNum:       0,
+		FlowNum:     1,
+		Remark:      "流量回收",
+	}
+	ps, err := getClient().DynamicProxyReturn(req)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	t.Logf("%+v", ps)
+}
+
+func TestIpvClient_CreateProxyUser(t *testing.T) {
+	req := dto.AppProxyUserReq{
+		AppUsername:     "",
+		Password:        "",
+		LimitFlow:       0,
+		MainUsername:    "",
+		AppMainUsername: "",
+		Remark:          "",
+		Status:          1,
+	}
+	ps, err := getClient().CreateProxyUser(req)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	t.Logf("%+v", ps)
+}
