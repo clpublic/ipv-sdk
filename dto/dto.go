@@ -29,7 +29,7 @@ type AppProductSyncReq struct {
 	CityCode     string `json:"cityCode"`     //城市代码 可选
 	SupplierCode string `json:"supplierCode"` //供应商代码 可选
 	Unit         int8   `json:"unit"`         //时长单位 可选 1=天 2=周(7天) 3=月(自然月) 4=年(自然年365，366) 10=无限制
-	IspType      int    `json:"ispType"`      //isp类型 可选 1=单isp 2=双isp
+	IspType      int    `json:"ispType"`      //isp类型 可选 1=单isp 2=双isp 3原生 4机房
 	Duration     int32  `json:"duration"`     //相对于时长单位的最小购买时长 可选
 }
 
@@ -59,7 +59,7 @@ type AppProductSyncResp struct {
 	CostPrice      string      `json:"costPrice"`      //必要 价格
 	Inventory      int         `json:"inventory"`      //必要 库存
 	IpType         int         `json:"ipType"`         //ip类型 1=ipv4 2=ipv6 3=随机 默认1
-	IspType        int         `json:"ispType"`        //ispType 1=单isp 2=双isp
+	IspType        int         `json:"ispType"`        //ispType 1=单isp 2=双isp 3原生 4机房
 	Duration       int         `json:"duration"`       //必要 时长 0无限制
 	Unit           int         `json:"unit"`           //单位 1=天 2=周(7天) 3=月(自然月) 4=年(自然年365，366)
 	BandWidth      int         `json:"bandWidth"`      //带宽|流量时必要 单位 MB
@@ -223,7 +223,7 @@ type OpenParam struct {
 	CityCode     string      `json:"cityCode"`     //城市代码（匹配产品用，如果产品编号有值忽略该项）
 	SupplierCode string      `json:"supplierCode"` //供应商代码（匹配产品用，如果产品编号有值忽略该项）（可为null,随机分配）
 	Unit         int8        `json:"unit"`         //单位（匹配产品用，如果产品编号有值忽略该项） 1=天 2=周(7天) 3=月(自然月) 4=年(自然年365，366) 10=无限制
-	IspType      int         `json:"ispType"`      //isp类型（匹配产品用，如果产品编号有值忽略该项） 1=单isp 2=双isp
+	IspType      int         `json:"ispType"`      //isp类型（匹配产品用，如果产品编号有值忽略该项） 1=单isp 2=双isp 3原生 4机房
 	Count        int         `json:"count"`        //购买数量 （实例个数）静态必填 默认1 一次最大20
 	Duration     int32       `json:"duration"`     //相对时长 必要 默认1 为Unit的时长 此处不是指的绝对时长 指的是相对x个时间单位(unit)的时长 2024-9-21改为产品定义的时长单位 （匹配产品用，如果产品编号有值忽略该项）  之前对接的定义不变
 	Renew        bool        `json:"renew"`        //是否续费 1续费 默认0
