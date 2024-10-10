@@ -61,6 +61,9 @@ const (
 	// 动态代理回收
 	DynamicProxyReturnUri = "/api/open/app/proxy/return/" + VERSION
 
+	// 指定ip开通实例
+	InstanceOpenAssignIpUri = "/api/open/app/instance/open/assign/ip/" + VERSION
+
 	Encrypt_AES = "AES" //aes cbc模式
 )
 
@@ -350,6 +353,19 @@ func (c *IpvClient) ProxyFlowUseLog(params dto.AppFlowUseLogReq) (resp *dto.AppF
 // 动态代理回收
 func (c *IpvClient) DynamicProxyReturn(params dto.AppProxyReturnReq) (resp *dto.AppProxyReturnResp, err error) {
 	data, err := c.postData(DynamicProxyReturnUri, params)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// 指定ip开通静态实例
+func (c *IpvClient) InstanceOpenAssignIp(params dto.AppAssignIpInstanceOpenReq) (resp *dto.AppProxyReturnResp, err error) {
+	data, err := c.postData(InstanceOpenAssignIpUri, params)
 	if err != nil {
 		return nil, err
 	}
