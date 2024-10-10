@@ -84,6 +84,7 @@ type CIDRBlock struct {
 	CIDR  string `json:"cidr"`  // 网段 192.168.0.0/24 172.16.0.0/16 10.0.0.0/8
 	Count int    `json:"count"` // 网段ip数量 购买代理的时候如果传了网段 该字段必传
 	Asn   string `json:"asn"`   // 该网段属于哪个asn 购买代理的时候可选 新增 2024/09/21
+	Isp   string `json:"isp"`   // 该网段属于哪个isp 购买代理的时候可选 新增 2024/10/10
 }
 
 // 创建或修改主账号请求
