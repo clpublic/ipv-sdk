@@ -364,7 +364,7 @@ func (c *IpvClient) DynamicProxyReturn(params dto.AppProxyReturnReq) (resp *dto.
 }
 
 // 指定ip开通静态实例
-func (c *IpvClient) InstanceOpenAssignIp(params dto.AppAssignIpInstanceOpenReq) (resp *dto.AppProxyReturnResp, err error) {
+func (c *IpvClient) InstanceOpenAssignIp(params dto.AppAssignIpInstanceOpenReq) (resp *dto.AppInstanceOpenResp, err error) {
 	data, err := c.postData(InstanceOpenAssignIpUri, params)
 	if err != nil {
 		return nil, err
