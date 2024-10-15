@@ -63,6 +63,8 @@ const (
 
 	// 指定ip开通实例
 	InstanceOpenAssignIpUri = "/api/open/app/instance/open/assign/ip/" + VERSION
+	// 查询指定ip可用情况
+	GetAssignIpInfoUri = "/api/open/app/assign/ip/info/" + VERSION
 
 	Encrypt_AES = "AES" //aes cbc模式
 )
@@ -366,6 +368,18 @@ func (c *IpvClient) DynamicProxyReturn(params dto.AppProxyReturnReq) (resp *dto.
 // 指定ip开通静态实例
 func (c *IpvClient) InstanceOpenAssignIp(params dto.AppAssignIpInstanceOpenReq) (resp *dto.AppInstanceOpenResp, err error) {
 	data, err := c.postData(InstanceOpenAssignIpUri, params)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (c *IpvClient) GetAssignIpInfo(params dto.AppGetAssignIpInfoReq) (resp *dto.AppGetAssignIpInfoResp, err error) {
+	data, err := c.postData(GetAssignIpInfoUri, params)
 	if err != nil {
 		return nil, err
 	}

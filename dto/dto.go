@@ -78,7 +78,9 @@ type AppProductSyncResp struct {
 	RefundDuration int         `json:"refundDuration"` //退款时效 单位秒 0=不支持退款 大于0表示从创建订单之后多少秒内可以退款 默认为0 新增于2024/08/12
 	IpCount        int         `json:"ipCount"`        //ip数量 动态代理按照ip数量购买 该字段大于0 默认为0 新增于2024/08/26
 	IpDuration     int         `json:"ipDuration"`     //ip时长 动态代理按照ip数量购买 单位分钟 该字段大于0 默认为0 新增于2024/08/26
-	AssignIp       int         `json:"assignIp"`       //是否支持指定ip购买 1=是 0=否 默认为0 新增于2024/10/10
+	AssignIp       int         `json:"assignIp"`       //是否支持指定ip购买 1=是 -1=否 默认为-1 新增于2024/10/10
+	ParentNo       string      `json:"parentNo"`       //父产品编号 新增于2024/10/15
+	CIDRStatus     int         `json:"cidrStatus"`     //ip段支持状态 1=支持 -1=不支持 默认为-1 新增于2024/10/15
 }
 
 // 新增 2024/06/27
@@ -470,4 +472,14 @@ type AppAssignIpInstanceOpenReq struct {
 	UseBridge    uint8  `json:"useBridge"`    //是否使用桥 0=随app设置 1=不使用桥 2=使用桥 默认0
 	AssignIp     string `json:"assignIp"`     //指定ip购买 必须
 	CycleTimes   int32  `json:"cycleTimes"`   //购买时长周期数，此字段对有时长的产品有意义，默认1 表示cycleTimes个产品的最低单位时长  必须
+}
+
+// 获取指定ip是否可以创建代理
+type AppGetAssignIpInfoReq struct {
+	Ip string `json:"ip"` //必要 ip
+}
+
+type AppGetAssignIpInfoResp struct {
+	Ip           string `json:"ip"`           //必要 ip
+	CanBuyStatus bool   `json:"canBuyStatus"` //必要 指定ip购买状态  true=可以购买 false=不能购买 默认不能购买
 }

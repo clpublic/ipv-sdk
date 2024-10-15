@@ -270,3 +270,15 @@ func TestIpvClient_InstanceOpenAssignIp(t *testing.T) {
 	}
 	t.Logf("%+v", ps)
 }
+
+func TestIpvClient_GetAssignIpInfo(t *testing.T) {
+	o := dto.AppGetAssignIpInfoReq{
+		Ip: "",
+	}
+	ps, err := getClient().GetAssignIpInfo(o)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	t.Logf("%+v", ps)
+}
