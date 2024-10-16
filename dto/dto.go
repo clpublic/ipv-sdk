@@ -30,6 +30,7 @@ type AppProductSyncReq struct {
 	SupplierCode string `json:"supplierCode"` //供应商代码 可选
 	Unit         int8   `json:"unit"`         //时长单位 可选 1=天 2=周(7天) 3=月(自然月) 4=年(自然年365，366) 10=无限制
 	IspType      int    `json:"ispType"`      //isp类型 可选 1=单isp 2=双isp
+	NetType      int    `json:"netType"`      //网络类型 1=原生 2=广播
 	Duration     int32  `json:"duration"`     //相对于时长单位的最小购买时长 可选
 }
 
@@ -60,6 +61,7 @@ type AppProductSyncResp struct {
 	Inventory      int         `json:"inventory"`      //必要 库存
 	IpType         int         `json:"ipType"`         //ip类型 1=ipv4 2=ipv6 3=随机 默认1
 	IspType        int         `json:"ispType"`        //ispType 1=单isp 2=双isp
+	NetType        int         `json:"netType"`        //网络类型 1=原生 2=广播
 	Duration       int         `json:"duration"`       //必要 时长 0无限制
 	Unit           int         `json:"unit"`           //单位 1=天 2=周(7天) 3=月(自然月) 4=年(自然年365，366)
 	BandWidth      int         `json:"bandWidth"`      //带宽|流量时必要 单位 MB
@@ -76,6 +78,9 @@ type AppProductSyncResp struct {
 	RefundDuration int         `json:"refundDuration"` //退款时效 单位秒 0=不支持退款 大于0表示从创建订单之后多少秒内可以退款 默认为0 新增于2024/08/12
 	IpCount        int         `json:"ipCount"`        //ip数量 动态代理按照ip数量购买 该字段大于0 默认为0 新增于2024/08/26
 	IpDuration     int         `json:"ipDuration"`     //ip时长 动态代理按照ip数量购买 单位分钟 该字段大于0 默认为0 新增于2024/08/26
+	AssignIp       int         `json:"assignIp"`       //是否支持指定ip购买 1=是 -1=否 默认为-1 新增于2024/10/10
+	ParentNo       string      `json:"parentNo"`       //父产品编号 新增于2024/10/15
+	CIDRStatus     int         `json:"cidrStatus"`     //ip段支持状态 1=支持 -1=不支持 默认为-1 新增于2024/10/15
 }
 
 // 新增 2024/06/27
@@ -84,6 +89,7 @@ type CIDRBlock struct {
 	CIDR  string `json:"cidr"`  // 网段 192.168.0.0/24 172.16.0.0/16 10.0.0.0/8
 	Count int    `json:"count"` // 网段ip数量 购买代理的时候如果传了网段 该字段必传
 	Asn   string `json:"asn"`   // 该网段属于哪个asn 购买代理的时候可选 新增 2024/09/21
+	Isp   string `json:"isp"`   // 该网段属于哪个网络提供商 购买代理的时候可选 新增 2024/10/10
 }
 
 // 创建或修改主账号请求
@@ -455,4 +461,25 @@ type AppProxyReturnReq struct {
 // 动态代理回收返回
 type AppProxyReturnResp struct {
 	ReturnAmount float64 `json:"returnAmount"` //回收代理退还金额 单位元
+}
+
+// 指定ip开通代理资源请求
+type AppAssignIpInstanceOpenReq struct {
+	AppOrderNo   string `json:"appOrderNo"`   //购买者订单号(渠道商订单号) 必须
+	ProductNo    string `json:"productNo"`    //产品编号 必须 但是指定购买成功的ip不一定和产品的所属区域一致
+	Renew        bool   `json:"renew"`        //是否自动续费 1自动续费 默认0
+	ExtBandWidth int32  `json:"extBandWidth"` //额外增加带宽 单位Mbps
+	UseBridge    uint8  `json:"useBridge"`    //是否使用桥 0=随app设置 1=不使用桥 2=使用桥 默认0
+	AssignIp     string `json:"assignIp"`     //指定ip购买 必须
+	CycleTimes   int32  `json:"cycleTimes"`   //购买时长周期数，此字段对有时长的产品有意义，默认1 表示cycleTimes个产品的最低单位时长  必须
+}
+
+// 获取指定ip是否可以创建代理
+type AppGetAssignIpInfoReq struct {
+	Ip string `json:"ip"` //必要 ip
+}
+
+type AppGetAssignIpInfoResp struct {
+	Ip           string `json:"ip"`           //必要 ip
+	CanBuyStatus bool   `json:"canBuyStatus"` //必要 指定ip购买状态  true=可以购买 false=不能购买 默认不能购买
 }
