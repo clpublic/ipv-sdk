@@ -259,6 +259,7 @@ type AppInstanceRenewReq struct {
 type Instance struct {
 	InstanceNo string `json:"instanceNo"` //平台实例编号
 	Duration   int32  `json:"duration"`   //可选 时长 续费的时候默认是购买的时候的时长
+	CycleTimes int32  `json:"cycleTimes"` //可选 购买时长周期数，此字段对有时长的产品有意义，默认1 表示cycleTimes个产品的最低单位时长 有这个优先使用 2024/10/25新增
 }
 
 // 续费代理资源返回
