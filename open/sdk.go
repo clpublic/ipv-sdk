@@ -472,7 +472,7 @@ func (c *IpvClient) postData(uri string, params any) (resData []byte, err error)
 	}
 	if res.Code != 200 {
 		slog.Error("ipipv_sdk", "Error response:", res)
-		return nil, errors.New(res.Msg)
+		return nil, fmt.Errorf("[code]=%d,[msg]=%s", res.Code, res.Msg)
 	}
 
 	encrypted, err := base64.StdEncoding.DecodeString(res.Data)
