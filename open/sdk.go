@@ -235,7 +235,7 @@ func (c *IpvClient) GetCityList(params dto.AppCityListReq) (resp []dto.AppCityLi
 }
 
 // 获取开通
-func (c *IpvClient) InstanceOpen(params dto.AppInstanceOpenReq) (resp *dto.AppOrderResp, err error) {
+func (c *IpvClient) InstanceOpen(params dto.AppInstanceOpenReq) (resp *dto.AppInstanceOpenResp, err error) {
 	data, err := c.postData(InstanceOpenUri, params)
 	if err != nil {
 		return nil, err
@@ -248,7 +248,7 @@ func (c *IpvClient) InstanceOpen(params dto.AppInstanceOpenReq) (resp *dto.AppOr
 }
 
 // 获取续费
-func (c *IpvClient) InstanceRenew(params dto.AppInstanceRenewReq) (resp *dto.AppOrderResp, err error) {
+func (c *IpvClient) InstanceRenew(params dto.AppInstanceRenewReq) (resp *dto.AppInstanceRenewResp, err error) {
 	data, err := c.postData(InstanceRenewUri, params)
 	if err != nil {
 		return nil, err
