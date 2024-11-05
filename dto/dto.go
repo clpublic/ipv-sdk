@@ -484,4 +484,5 @@ type AppGetAssignIpInfoReq struct {
 type AppGetAssignIpInfoResp struct {
 	Ip           string `json:"ip"`           //必要 ip
 	CanBuyStatus bool   `json:"canBuyStatus"` //必要 指定ip购买状态  true=可以购买 false=不能购买 默认不能购买
+	ProductNo    string `json:"productNo"`    //可选 如果可以购买的时候  返回产品编号
 }
