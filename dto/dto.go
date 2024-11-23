@@ -153,15 +153,16 @@ type AppAuthUserResp struct {
 
 // 获取订单列表请求
 type AppGetOrderReq struct {
-	OrderNo  string `json:"orderNo"`  // 平台订单编号
-	Page     int    `json:"page"`     // 页码  默认1
-	PageSize int    `json:"pageSize"` // 每页显示数量  默认10 最大100
+	OrderNo    string `json:"orderNo"`    // 平台订单编号
+	AppOrderNo string `json:"appOrderNo"` // 渠道商（购买方）订单编号
+	Page       int    `json:"page"`       // 页码  默认1
+	PageSize   int    `json:"pageSize"`   // 每页显示数量  默认10 最大100
 }
 
 // 订单返回
 type AppOrderResp struct {
 	OrderNo    string            `json:"orderNo"`    //平台订单号
-	AppOrderNo string            `json:"appOrderNo"` //渠道商（购买订单）订单号
+	AppOrderNo string            `json:"appOrderNo"` //渠道商（购买方）订单编号
 	Type       int8              `json:"type"`       //订单类型 1=新建 2=续费 3=释放
 	Status     int8              `json:"status"`     //订单状态 1=待处理 2=处理中 3=处理成功 4=处理失败 5=部分完成
 	Count      int               `json:"count"`      //购买数量
