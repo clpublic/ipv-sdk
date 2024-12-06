@@ -153,15 +153,16 @@ type AppAuthUserResp struct {
 
 // 获取订单列表请求
 type AppGetOrderReq struct {
-	OrderNo  string `json:"orderNo"`  // 平台订单编号
-	Page     int    `json:"page"`     // 页码  默认1
-	PageSize int    `json:"pageSize"` // 每页显示数量  默认10 最大100
+	OrderNo    string `json:"orderNo"`    // 平台订单编号
+	AppOrderNo string `json:"appOrderNo"` // 渠道商（购买方）订单编号
+	Page       int    `json:"page"`       // 页码  默认1
+	PageSize   int    `json:"pageSize"`   // 每页显示数量  默认10 最大100
 }
 
 // 订单返回
 type AppOrderResp struct {
 	OrderNo    string            `json:"orderNo"`    //平台订单号
-	AppOrderNo string            `json:"appOrderNo"` //渠道商（购买订单）订单号
+	AppOrderNo string            `json:"appOrderNo"` //渠道商（购买方）订单编号
 	Type       int8              `json:"type"`       //订单类型 1=新建 2=续费 3=释放
 	Status     int8              `json:"status"`     //订单状态 1=待处理 2=处理中 3=处理成功 4=处理失败 5=部分完成
 	Count      int               `json:"count"`      //购买数量
@@ -183,7 +184,7 @@ type AppInstanceResp struct {
 	InstanceNo  string    `json:"instanceNo"`  //平台实例编号（渠道商续费和释放操作使用该编号）
 	ProxyType   uint      `json:"proxyType"`   //代理类型 101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
 	Protocol    string    `json:"protocol" `   //协议类型 多个用英文逗号分隔 1=socks5 2=http 3=https 4=ssh
-	Ip          string    `json:"ip"`          //代理ip地址
+	Ip          string    `json:"ip"`          //代理地址 用户实际代理访问使用
 	Port        uint      `json:"port"`        //代理端口
 	RegionId    string    `json:"regionId"`    //区域地址
 	CountryCode string    `json:"countryCode"` //国家代码
@@ -202,6 +203,7 @@ type AppInstanceResp struct {
 	RenewAt     time.Time `json:"renewAt"`     //最后成功续费时间
 	ReleaseAt   time.Time `json:"releaseAt"`   //释放成功时间
 	ProductNo   string    `json:"productNo"`   //产品编号
+	ExtendIp    string    `json:"extendIp"`    //扩展地址 仅供展示，部分产品该字段有值 2024-11-20 新增
 }
 
 // 同步地域请求
