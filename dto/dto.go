@@ -487,3 +487,77 @@ type AppGetAssignIpInfoResp struct {
 	Ip           string `json:"ip"`           //必要 ip
 	CanBuyStatus bool   `json:"canBuyStatus"` //必要 指定ip购买状态  true=可以购买 false=不能购买 默认不能购买
 }
+
+// 获取历史订单列表请求 最近1年
+type AppGetOrderListReq struct {
+	PageSize  int    `json:"pageSize"`  // 每页显示数量 默认20 最大100
+	StartTime string `json:"startTime"` //开始时间 可选 默认365天前 格式 2021-01-01 00:00:00
+	EndTime   string `json:"endTime"`   //结束时间 可选当天 格式 2021-01-01 00:00:00
+	Page      int    `json:"page"`      //页码 可选 默认1
+}
+
+// 历史订单返回
+type AppOrderListResp struct {
+	Page     int            `json:"page"`     // 页码 原样返回或者返回默认
+	PageSize int            `json:"pageSize"` // 每页显示数量  原样返回或者返回默认
+	Total    int64          `json:"total"`    // 总数量
+	CurPage  int            `json:"curPage"`  // 当前页
+	List     []AppOrderItem `json:"list"`     // 订单列表
+}
+
+type AppOrderItem struct {
+	OrderNo      string    `json:"orderNo"`      //平台订单编号
+	AppOrderNo   string    `json:"appOrderNo"`   //渠道商（购买方）订单编号
+	CityCode     string    `json:"cityCode"`     //城市编号
+	InstanceNo   string    `json:"instanceNo"`   //代理实例编号  新建购买代理订单该字段为空
+	Type         int8      `json:"type"`         //订单类型 1=新建购买代理 2=续费代理 3=释放代理
+	Status       int8      `json:"status"`       //订单状态 1=待处理 2=处理中 3=处理成功 4=处理失败 5=部分完成
+	Count        int       `json:"count"`        //购买数量
+	SuccessCount int       `json:"successCount"` //成功数量
+	Amount       string    `json:"amount"`       //金额
+	ExtBandWidth int32     `json:"extBandWidth"` //额外带宽 单位MB
+	Flow         int       `json:"flow"`         //总流量MB或者总ip个数 动态代理订单才有值
+	CreatedAt    time.Time `json:"createdAt"`    //下单时间
+}
+
+// 获取实列历史列表请求
+type AppGetInstanceListReq struct {
+	PageSize  int    `json:"pageSize"`  // 每页显示数量 默认20 最大100
+	StartTime string `json:"startTime"` //开始时间 可选 默认365天前 格式 2021-01-01 00:00:00
+	EndTime   string `json:"endTime"`   //结束时间 可选当天 格式 2021-01-01 00:00:00
+	Page      int    `json:"page"`      //页码 可选 默认1
+}
+
+// 实例返回
+type AppInstanceListResp struct {
+	Page     int               `json:"page"`     // 页码 原样返回或者返回默认
+	PageSize int               `json:"pageSize"` // 每页显示数量  原样返回或者返回默认
+	Total    int64             `json:"total"`    // 总数量
+	CurPage  int               `json:"curPage"`  // 当前页
+	List     []AppInstanceItem `json:"list"`     // 实例列表
+}
+
+type AppInstanceItem struct {
+	InstanceNo  string    `json:"instanceNo"`  //平台实例编号（渠道商续费和释放操作使用该编号）
+	ProxyType   uint      `json:"proxyType"`   //代理类型 101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
+	Protocol    string    `json:"protocol" `   //协议类型 多个用英文逗号分隔 1=socks5 2=http 3=https 4=ssh
+	Ip          string    `json:"ip"`          //代理地址 用户实际代理访问使用
+	Port        uint      `json:"port"`        //代理端口
+	RegionId    string    `json:"regionId"`    //区域地址
+	CountryCode string    `json:"countryCode"` //国家代码
+	CityCode    string    `json:"cityCode"`    //城市代码
+	UseType     string    `json:"useType"`     //使用方式 多个用英文逗号分隔  1=账密 2=ip白名单 3=uuid（uuid写password内）
+	Username    string    `json:"username"`    //账户名或uuid 动态为平台主账号
+	Pwd         string    `json:"pwd"`         //密码
+	OrderNo     string    `json:"orderNo"`     //创建该代理实例的平台订单号
+	UserExpired int64     `json:"userExpired"` //到期时间
+	FlowTotal   float64   `json:"flowTotal"`   //总流量
+	FlowBalance float64   `json:"flowBalance"` //剩余流量
+	Status      int8      `json:"status"`      //1=待创建 2=创建中 3=运行中 6=已停止 10=关闭 11=释放
+	Bridges     []string  `json:"bridges"`     //桥地址列表
+	OpenAt      time.Time `json:"openAt"`      //开通时间
+	RenewAt     time.Time `json:"renewAt"`     //最后成功续费时间
+	ReleaseAt   time.Time `json:"releaseAt"`   //释放成功时间
+	ProductNo   string    `json:"productNo"`   //产品编号
+	ExtendIp    string    `json:"extendIp"`    //扩展地址 仅供展示，部分产品该字段有值 2024-11-20 新增
+}

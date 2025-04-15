@@ -66,6 +66,11 @@ const (
 	// 查询指定ip可用情况
 	GetAssignIpInfoUri = "/api/open/app/assign/ip/info/" + VERSION
 
+	// 获取订单列表
+	GetOrderListUri = "/api/open/app/order/list/" + VERSION
+	// 获取实列列表
+	GetInstanceListUri = "/api/open/app/instance/list/" + VERSION
+
 	Encrypt_AES = "AES" //aes cbc模式
 )
 
@@ -390,8 +395,35 @@ func (c *IpvClient) GetAssignIpInfo(params dto.AppGetAssignIpInfoReq) (resp *dto
 	return
 }
 
-func (c *IpvClient) postData(uri string, params any) (resData []byte, err error) {
+// 获取订单信息
+func (c *IpvClient) GetOrderList(params dto.AppGetOrderListReq) (resp *dto.AppOrderListResp, err error) {
+	data, err := c.postData(GetOrderListUri, params)
+	if err != nil {
+		return nil, fmt.Errorf("%s %w", GetOrderListUri, err)
+	}
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		slog.Error("ipipv_sdk", "GetOrderList-json.Unmarshal", err)
+		return
+	}
+	return
+}
 
+// 获取实例信息
+func (c *IpvClient) GetInstanceList(params dto.AppGetInstanceListReq) (resp *dto.AppInstanceListResp, err error) {
+	data, err := c.postData(GetInstanceListUri, params)
+	if err != nil {
+		return resp, fmt.Errorf("%s %w", GetInstanceListUri, err)
+	}
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		slog.Error("ipipv_sdk", "GetInstanceList-json.Unmarshal", err)
+		return
+	}
+	return
+}
+
+func (c *IpvClient) postData(uri string, params any) (resData []byte, err error) {
 	aoReq := dto.AppOpenReq{
 		Version: VERSION,
 		Encrypt: c.Encrypt,

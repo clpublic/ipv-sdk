@@ -282,3 +282,33 @@ func TestIpvClient_GetAssignIpInfo(t *testing.T) {
 	}
 	t.Logf("%+v", ps)
 }
+
+func TestIpvClient_GetOrderList(t *testing.T) {
+	o := dto.AppGetOrderListReq{
+		StartTime: "2024-01-01",
+		EndTime:   "",
+		Page:      1,
+		PageSize:  10,
+	}
+	ps, err := getClient().GetOrderList(o)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	t.Logf("%+v", ps)
+}
+
+func TestIpvClient_GetInstanceList(t *testing.T) {
+	o := dto.AppGetInstanceListReq{
+		StartTime: "2024-01-01",
+		EndTime:   "",
+		Page:      1,
+		PageSize:  10,
+	}
+	ps, err := getClient().GetInstanceList(o)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	t.Logf("%+v", ps)
+}
