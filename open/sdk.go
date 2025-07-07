@@ -476,7 +476,9 @@ func (c *IpvClient) postData(uri string, params any) (resData []byte, err error)
 	req.Header.Set("Content-Type", "application/json")
 
 	// 发送请求
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: time.Second * 30,
+	}
 	resp, err := client.Do(req)
 	if err != nil {
 		slog.Error("ipipv_sdk", "Error sending request:", err)
