@@ -82,13 +82,13 @@ type AppProductSyncResp struct {
 	ParentNo          string             `json:"parentNo"`          //父产品编号 新增于2024/10/15
 	CIDRStatus        int                `json:"cidrStatus"`        //ip段支持状态 1=支持 -1=不支持 默认为-1 新增于2024/10/15
 	OneDay            int                `json:"oneDay"`            //是否支持1天的测试 1=是 -1=否 新增于2024/10/17
-	OfflineCIDRBlocks []OfflineCIDRBlock `json:"offlineCidrBlocks"` //下架的网段 新增 2025/07/07
+	OfflineCIDRBlocks []OfflineCIDRBlock `json:"offlineCidrBlocks"` //最近1个月下架的网段 新增 2025/07/07
 }
 
 // 下架网段 新增 2025/0707
 type OfflineCIDRBlock struct {
 	CIDR        string `json:"cidr"`        // 网段 192.168.0.0/24 172.16.0.0/16 10.0.0.0/8
-	OfflineTime string `json:"offlineTime"` // 网段下线时间 格式 2024-06-27 12:00:00
+	OfflineTime string `json:"offlineTime"` // 网段下架时间 格式 2024-06-27 12:00:00
 }
 
 // 新增 2024/06/27
