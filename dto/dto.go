@@ -221,7 +221,7 @@ type AppGetAreaReq struct {
 // 同步地域返回
 type AppAreaResp struct {
 	Code     string        `json:"code"`               //地域代码
-	Name     string        `json:"name"`               //地域名称
+	Name     string        `json:"name"`               //地域英文名称
 	Cname    string        `json:"cname"`              //地域中文名
 	Children []AppAreaResp `json:"children,omitempty"` //下级地域
 }
@@ -448,15 +448,19 @@ type AppCityListReq struct {
 
 // 同步城市列表返回
 type AppCityListResp struct {
-	CityCode    string `json:"cityCode"`    //城市代码
-	CityName    string `json:"cityName"`    //城市名称
-	StateCode   string `json:"stateCode"`   //州、省代码
-	StateName   string `json:"stateName"`   //州、省名称
-	CountryCode string `json:"countryCode"` //国家代码
-	CountryName string `json:"countryName"` //国家名称
-	AreaCode    string `json:"areaCode"`    //洲代码
-	AreaName    string `json:"areaName"`    //洲名称
-	Status      int    `json:"status"`      //状态 1=上架 -1=下架
+	CityCode      string `json:"cityCode"`      //城市代码
+	CityName      string `json:"cityName"`      //城市中文名称
+	CityEnName    string `json:"cityEnName"`    //城市英文名称
+	StateCode     string `json:"stateCode"`     //州、省代码
+	StateName     string `json:"stateName"`     //州、省中文名称
+	StateEnName   string `json:"stateEnName"`   //州、省英文名称
+	CountryCode   string `json:"countryCode"`   //国家代码
+	CountryName   string `json:"countryName"`   //国家中文名称
+	CountryEnName string `json:"countryEnName"` //国家英文名称
+	AreaCode      string `json:"areaCode"`      //洲代码
+	AreaName      string `json:"areaName"`      //洲中文名称
+	AreaEnName    string `json:"areaEnName"`    //洲英文名称
+	Status        int    `json:"status"`        //状态 1=上架 -1=下架
 }
 
 // 动态代理回收请求
