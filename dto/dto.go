@@ -45,44 +45,46 @@ type AppInfoResp struct {
 
 // 获取产品列表返回 （明文返回）
 type AppProductSyncResp struct {
-	ProductNo         string             `json:"productNo"`         //必要，产品Id 保持唯一
-	ProductName       string             `json:"productName"`       //必要,商品名
-	ProxyType         int16              `json:"proxyType"`         //必要, 101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
-	UseType           string             `json:"useType"`           //必要, ,分割  1=账密 2=白名单 3=uuid
-	Protocol          string             `json:"protocol"`          //必要,1=socks5 2=http 3=https 4=ssh
-	UseLimit          int8               `json:"useLimit"`          //必要,1=出口ip国外 2=出口ip国内 3=无限制
-	SellLimit         int8               `json:"sellLimit"`         //必要,1=大陆可售 2=海外可售 3=无限制
-	AreaCode          string             `json:"areaCode"`          //区域code
-	CountryCode       string             `json:"countryCode"`       //必要,国家代码 3位 iso标准
-	StateCode         string             `json:"stateCode"`         //必要,州省代码 6位
-	CityCode          string             `json:"cityCode"`          //必要,城市代码 向我方提取
-	Detail            string             `json:"detail"`            //商品描述
-	CostPrice         string             `json:"costPrice"`         //必要 价格
-	Inventory         int                `json:"inventory"`         //必要 库存
-	IpType            int                `json:"ipType"`            //ip类型 1=ipv4 2=ipv6 3=随机 默认1
-	IspType           int                `json:"ispType"`           //ispType 1=单isp 2=双isp
-	NetType           int                `json:"netType"`           //网络类型 1=原生 2=广播
-	Duration          int                `json:"duration"`          //必要 时长 0无限制
-	Unit              int                `json:"unit"`              //单位 1=天 2=周(7天) 3=月(自然月) 4=年(自然年365，366)
-	BandWidth         int                `json:"bandWidth"`         //带宽|流量时必要 单位 MB
-	BandWidthType     int                `json:"bandWidthType"`     //带宽类型 1=独享 2=共享 3=流量包
-	BandWidthPrice    string             `json:"bandWidthPrice"`    //额外带宽价格
-	MaxBandWidth      int                `json:"maxBandWidth"`      //可设置最大带宽
-	Flow              int                `json:"flow"`              //流量包
-	Cpu               int                `json:"cpu"`               //cpu数
-	Memory            float64            `json:"memory"`            //内存容量
-	Enable            int8               `json:"enable"`            //是否可以购买 1可以
-	SupplierCode      string             `json:"supplierCode"`      //供应商代码
-	CIDRBlocks        []CIDRBlock        `json:"cidrBlocks"`        //支持网段及数量 新增 2024/06/27
-	DrawType          int                `json:"drawType"`          //代理提取方式 0=不需要提取(静态代理) 1=白名单提取(api) 2=账密提取 3=都支持 默认为0 新增于2024/08/12
-	RefundDuration    int                `json:"refundDuration"`    //退款时效 单位秒 0=不支持退款 大于0表示从创建订单之后多少秒内可以退款 默认为0 新增于2024/08/12
-	IpCount           int                `json:"ipCount"`           //ip数量 动态代理按照ip数量购买 该字段大于0 默认为0 新增于2024/08/26
-	IpDuration        int                `json:"ipDuration"`        //ip时长 动态代理按照ip数量购买 单位分钟 该字段大于0 默认为0 新增于2024/08/26
-	AssignIp          int                `json:"assignIp"`          //是否支持指定ip购买 1=是 -1=否 默认为-1 新增于2024/10/10
-	ParentNo          string             `json:"parentNo"`          //父产品编号 新增于2024/10/15
-	CIDRStatus        int                `json:"cidrStatus"`        //ip段支持状态 1=支持 -1=不支持 默认为-1 新增于2024/10/15
-	OneDay            int                `json:"oneDay"`            //是否支持1天的测试 1=是 -1=否 新增于2024/10/17
-	OfflineCIDRBlocks []OfflineCIDRBlock `json:"offlineCidrBlocks"` //最近1个月下架的网段 新增 2025/07/07
+	ProductNo            string             `json:"productNo"`            //必要，产品Id 保持唯一
+	ProductName          string             `json:"productName"`          //必要,商品名
+	ProxyType            int16              `json:"proxyType"`            //必要, 101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
+	UseType              string             `json:"useType"`              //必要, ,分割  1=账密 2=白名单 3=uuid
+	Protocol             string             `json:"protocol"`             //必要,1=socks5 2=http 3=https 4=ssh
+	UseLimit             int8               `json:"useLimit"`             //必要,1=出口ip国外 2=出口ip国内 3=无限制
+	SellLimit            int8               `json:"sellLimit"`            //必要,1=大陆可售 2=海外可售 3=无限制
+	AreaCode             string             `json:"areaCode"`             //区域code
+	CountryCode          string             `json:"countryCode"`          //必要,国家代码 3位 iso标准
+	StateCode            string             `json:"stateCode"`            //必要,州省代码 6位
+	CityCode             string             `json:"cityCode"`             //必要,城市代码 向我方提取
+	Detail               string             `json:"detail"`               //商品描述
+	CostPrice            string             `json:"costPrice"`            //必要 价格
+	Inventory            int                `json:"inventory"`            //必要 库存
+	IpType               int                `json:"ipType"`               //ip类型 1=ipv4 2=ipv6 3=随机 默认1
+	IspType              int                `json:"ispType"`              //ispType 1=单isp 2=双isp
+	NetType              int                `json:"netType"`              //网络类型 1=原生 2=广播
+	Duration             int                `json:"duration"`             //必要 时长 0无限制
+	Unit                 int                `json:"unit"`                 //单位 1=天 2=周(7天) 3=月(自然月) 4=年(自然年365，366)
+	BandWidth            int                `json:"bandWidth"`            //带宽|流量时必要 单位 MB
+	BandWidthType        int                `json:"bandWidthType"`        //带宽类型 1=独享 2=共享 3=流量包
+	BandWidthPrice       string             `json:"bandWidthPrice"`       //额外带宽价格
+	MaxBandWidth         int                `json:"maxBandWidth"`         //可设置最大带宽
+	Flow                 int                `json:"flow"`                 //流量包
+	Cpu                  int                `json:"cpu"`                  //cpu数
+	Memory               float64            `json:"memory"`               //内存容量
+	Enable               int8               `json:"enable"`               //是否可以购买 1可以
+	SupplierCode         string             `json:"supplierCode"`         //供应商代码
+	CIDRBlocks           []CIDRBlock        `json:"cidrBlocks"`           //支持网段及数量 新增 2024/06/27
+	DrawType             int                `json:"drawType"`             //代理提取方式 0=不需要提取(静态代理) 1=白名单提取(api) 2=账密提取 3=都支持 默认为0 新增于2024/08/12
+	RefundDuration       int                `json:"refundDuration"`       //退款时效 单位秒 0=不支持退款 大于0表示从创建订单之后多少秒内可以退款 默认为0 新增于2024/08/12
+	IpCount              int                `json:"ipCount"`              //ip数量 动态代理按照ip数量购买 该字段大于0 默认为0 新增于2024/08/26
+	IpDuration           int                `json:"ipDuration"`           //ip时长 动态代理按照ip数量购买 单位分钟 该字段大于0 默认为0 新增于2024/08/26
+	AssignIp             int                `json:"assignIp"`             //是否支持指定ip购买 1=是 -1=否 默认为-1 新增于2024/10/10
+	ParentNo             string             `json:"parentNo"`             //父产品编号 新增于2024/10/15
+	CIDRStatus           int                `json:"cidrStatus"`           //ip段支持状态 1=支持 -1=不支持 默认为-1 新增于2024/10/15
+	OneDay               int                `json:"oneDay"`               //是否支持1天的测试 1=是 -1=否 新增于2024/10/17
+	OfflineCIDRBlocks    []OfflineCIDRBlock `json:"offlineCidrBlocks"`    //最近1个月下架的网段 新增 2025/07/07
+	ProxyEverytimeChange int                `json:"proxyEverytimeChange"` //动态代理账密提取 是否支持每次更换代理  1=是 -1=否 默认为否 新增于2025/08/14
+	ProxyGlobalRandom    int                `json:"proxyGlobalRandom"`    //动态代理提取 是否支持全球混播 1=是 -1=否 默认为否 新增于2025/08/14
 }
 
 // 下架网段 新增 2025/0707
