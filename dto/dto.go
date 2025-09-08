@@ -85,6 +85,13 @@ type AppProductSyncResp struct {
 	OfflineCIDRBlocks    []OfflineCIDRBlock `json:"offlineCidrBlocks"`    //最近1个月下架的网段 新增 2025/07/07
 	ProxyEverytimeChange int                `json:"proxyEverytimeChange"` //动态代理账密提取 是否支持每次更换代理  1=是 -1=否 默认为否 新增于2025/08/14
 	ProxyGlobalRandom    int                `json:"proxyGlobalRandom"`    //动态代理提取 是否支持全球混播 1=是 -1=否 默认为否 新增于2025/08/14
+	ApiDrawGlobalRandom  int                `json:"apiDrawGlobalRandom"`  //动态代理Api提取是否支持全球混播 1=是 -1=否 默认为否 新增于2025/09/5
+	IpWhiteList          int                `json:"ipWhiteList"`          //动态代理是否支持IP白名单功能 1=是 -1=否 默认为否 新增于2025/09/5
+	PwdDrawProxyUser     int                `json:"pwdDrawProxyUser"`     //动态代理账密提取是否支持子账号 1=是 -1=否 默认为否 新增于2025/09/5
+	ProxyUserFlowLimit   int                `json:"proxyUserFlowLimit"`   //动态代理子账号是否支持流量上限管理 1=是 -1=否 默认为否 新增于2025/09/5
+	FlowUseLog           int                `json:"flowUseLog"`           //动态代理是否支持流量明细查询 1=是 -1=否 默认为否 新增于2025/09/5
+	PwdDrawSessionRange  string             `json:"pwdDrawSessionRange"`  //动态代理账密流量提取持续时间范围 单位分钟 新增于2025/09/5
+	FlowConversionBase   int                `json:"flowConversionBase"`   //动态代理流量单位转化基准 1000 或者 1024 0表示未知或不支持  新增于2025/09/5
 }
 
 // 下架网段 新增 2025/0707
