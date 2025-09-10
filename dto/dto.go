@@ -46,7 +46,7 @@ type AppInfoResp struct {
 // 获取产品列表返回 （明文返回）
 type AppProductSyncResp struct {
 	ProductNo            string             `json:"productNo"`            //必要，产品Id 保持唯一
-	ProductName          string             `json:"productName"`          //必要,商品名
+	ProductName          string             `json:"productName"`          //可选,商品名 后续该字段逐步废弃
 	ProxyType            int16              `json:"proxyType"`            //必要, 101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
 	UseType              string             `json:"useType"`              //必要, ,分割  1=账密 2=白名单 3=uuid
 	Protocol             string             `json:"protocol"`             //必要,1=socks5 2=http 3=https 4=ssh
@@ -72,7 +72,7 @@ type AppProductSyncResp struct {
 	Cpu                  int                `json:"cpu"`                  //cpu数
 	Memory               float64            `json:"memory"`               //内存容量
 	Enable               int8               `json:"enable"`               //是否可以购买 1可以
-	SupplierCode         string             `json:"supplierCode"`         //供应商代码
+	SupplierCode         string             `json:"supplierCode"`         //供应商代码 后续该字段逐步废弃
 	CIDRBlocks           []CIDRBlock        `json:"cidrBlocks"`           //支持网段及数量 新增 2024/06/27
 	DrawType             int                `json:"drawType"`             //代理提取方式 0=不需要提取(静态代理) 1=白名单提取(api) 2=账密提取 3=都支持 默认为0 新增于2024/08/12
 	RefundDuration       int                `json:"refundDuration"`       //退款时效 单位秒 0=不支持退款 大于0表示从创建订单之后多少秒内可以退款 默认为0 新增于2024/08/12
