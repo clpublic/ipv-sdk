@@ -581,3 +581,28 @@ type AppInstanceItem struct {
 	ProductNo   string    `json:"productNo"`   //产品编号
 	ExtendIp    string    `json:"extendIp"`    //扩展地址 仅供展示，部分产品该字段有值 2024-11-20 新增
 }
+
+// 设置子账户流量上限请求
+type AppSetProxyUserFlowLimitReq struct {
+	ProductNo   string `json:"productNo"`   //平台产品编号 必填
+	AppUsername string `json:"appUsername"` //渠道商子账号 必填
+	LimitFlow   int64  `json:"limitFlow"`   //动态流量上限 必填 -1表示不限制  单位B
+	Remark      string `json:"remark"`      //备注
+}
+
+// 获取子账户信息请求
+type AppProxyUserInfoReq struct {
+	ProductNo   string `json:"productNo"`   //平台产品编号 必填
+	AppUsername string `json:"appUsername"` //渠道商子账号 必填
+}
+
+// 获取子账户信息返回
+type AppProxyUserInfoResp struct {
+	ProductNo   string `json:"productNo"`   //平台产品编号
+	AppUsername string `json:"appUsername"` //渠道商子账号名称
+	Username    string `json:"username"`    //平台子账号名称
+	LimitFlow   int64  `json:"limitFlow"`   //动态流量上限 -1表示不限制  单位B
+	Password    string `json:"password"`    //子账号密码
+	Remark      string `json:"remark"`      //备注
+	Status      int8   `json:"status"`      //子账号状态 1=正常 2=禁用
+}

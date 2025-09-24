@@ -312,3 +312,30 @@ func TestIpvClient_GetInstanceList(t *testing.T) {
 	}
 	t.Logf("%+v", ps)
 }
+
+func TestIpvClient_SetProxyUserFlowLimit(t *testing.T) {
+	o := dto.AppSetProxyUserFlowLimitReq{
+		ProductNo:   "out_dynamic_1", //
+		AppUsername: "",
+		LimitFlow:   -1, // 1G
+		Remark:      "",
+	}
+	err := getClient().SetProxyUserFlowLimit(o)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+}
+
+func TestIpvClient_GetProxyUserInfo(t *testing.T) {
+	o := dto.AppProxyUserInfoReq{
+		ProductNo:   "out_dynamic_1", //
+		AppUsername: "",
+	}
+	ps, err := getClient().GetProxyUserInfo(o)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	t.Logf("%+v", ps)
+}
