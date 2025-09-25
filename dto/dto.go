@@ -602,6 +602,7 @@ type AppProxyUserInfoResp struct {
 	AppUsername string `json:"appUsername"` //渠道商子账号名称
 	Username    string `json:"username"`    //平台子账号名称
 	LimitFlow   int64  `json:"limitFlow"`   //动态流量上限 -1表示不限制  单位B
+	UseFlow     int64  `json:"useFlow"`     //使用流量  单位B
 	Password    string `json:"password"`    //子账号密码
 	Remark      string `json:"remark"`      //备注
 	Status      int8   `json:"status"`      //子账号状态 1=正常 2=禁用
