@@ -46,7 +46,7 @@ type AppInfoResp struct {
 // 获取产品列表返回 （明文返回）
 type AppProductSyncResp struct {
 	ProductNo            string             `json:"productNo"`            //必要，产品Id 保持唯一
-	ProductName          string             `json:"productName"`          //必要,商品名
+	ProductName          string             `json:"productName"`          //可选,商品名 后续该字段逐步废弃
 	ProxyType            int16              `json:"proxyType"`            //必要, 101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
 	UseType              string             `json:"useType"`              //必要, ,分割  1=账密 2=白名单 3=uuid
 	Protocol             string             `json:"protocol"`             //必要,1=socks5 2=http 3=https 4=ssh
@@ -72,7 +72,7 @@ type AppProductSyncResp struct {
 	Cpu                  int                `json:"cpu"`                  //cpu数
 	Memory               float64            `json:"memory"`               //内存容量
 	Enable               int8               `json:"enable"`               //是否可以购买 1可以
-	SupplierCode         string             `json:"supplierCode"`         //供应商代码
+	SupplierCode         string             `json:"supplierCode"`         //供应商代码 后续该字段逐步废弃
 	CIDRBlocks           []CIDRBlock        `json:"cidrBlocks"`           //支持网段及数量 新增 2024/06/27
 	DrawType             int                `json:"drawType"`             //代理提取方式 0=不需要提取(静态代理) 1=白名单提取(api) 2=账密提取 3=都支持 默认为0 新增于2024/08/12
 	RefundDuration       int                `json:"refundDuration"`       //退款时效 单位秒 0=不支持退款 大于0表示从创建订单之后多少秒内可以退款 默认为0 新增于2024/08/12
@@ -85,6 +85,13 @@ type AppProductSyncResp struct {
 	OfflineCIDRBlocks    []OfflineCIDRBlock `json:"offlineCidrBlocks"`    //最近1个月下架的网段 新增 2025/07/07
 	ProxyEverytimeChange int                `json:"proxyEverytimeChange"` //动态代理账密提取 是否支持每次更换代理  1=是 -1=否 默认为否 新增于2025/08/14
 	ProxyGlobalRandom    int                `json:"proxyGlobalRandom"`    //动态代理提取 是否支持全球混播 1=是 -1=否 默认为否 新增于2025/08/14
+	ApiDrawGlobalRandom  int                `json:"apiDrawGlobalRandom"`  //动态代理Api提取是否支持全球混播 1=是 -1=否 默认为否 新增于2025/09/5
+	IpWhiteList          int                `json:"ipWhiteList"`          //动态代理是否支持IP白名单功能 1=是 -1=否 默认为否 新增于2025/09/5
+	PwdDrawProxyUser     int                `json:"pwdDrawProxyUser"`     //动态代理账密提取是否支持子账号 1=是 -1=否 默认为否 新增于2025/09/5
+	ProxyUserFlowLimit   int                `json:"proxyUserFlowLimit"`   //动态代理子账号是否支持流量上限管理 1=是 -1=否 默认为否 新增于2025/09/5
+	FlowUseLog           int                `json:"flowUseLog"`           //动态代理是否支持流量明细查询 1=是 -1=否 默认为否 新增于2025/09/5
+	PwdDrawSessionRange  string             `json:"pwdDrawSessionRange"`  //动态代理账密流量提取持续时间范围 单位分钟 新增于2025/09/5
+	FlowConversionBase   int                `json:"flowConversionBase"`   //动态代理流量单位转化基准 1000 或者 1024 0表示未知或不支持  新增于2025/09/5
 }
 
 // 下架网段 新增 2025/0707
@@ -573,4 +580,30 @@ type AppInstanceItem struct {
 	ReleaseAt   time.Time `json:"releaseAt"`   //释放成功时间
 	ProductNo   string    `json:"productNo"`   //产品编号
 	ExtendIp    string    `json:"extendIp"`    //扩展地址 仅供展示，部分产品该字段有值 2024-11-20 新增
+}
+
+// 设置子账户流量上限请求
+type AppSetProxyUserFlowLimitReq struct {
+	ProductNo   string `json:"productNo"`   //平台产品编号 必填
+	AppUsername string `json:"appUsername"` //渠道商子账号 必填
+	LimitFlow   int64  `json:"limitFlow"`   //动态流量上限 必填 -1表示不限制  单位B
+	Remark      string `json:"remark"`      //备注
+}
+
+// 获取子账户信息请求
+type AppProxyUserInfoReq struct {
+	ProductNo   string `json:"productNo"`   //平台产品编号 必填
+	AppUsername string `json:"appUsername"` //渠道商子账号 必填
+}
+
+// 获取子账户信息返回
+type AppProxyUserInfoResp struct {
+	ProductNo   string `json:"productNo"`   //平台产品编号
+	AppUsername string `json:"appUsername"` //渠道商子账号名称
+	Username    string `json:"username"`    //平台子账号名称
+	LimitFlow   int64  `json:"limitFlow"`   //动态流量上限 -1表示不限制  单位B
+	UseFlow     int64  `json:"useFlow"`     //使用流量  单位B
+	Password    string `json:"password"`    //子账号密码
+	Remark      string `json:"remark"`      //备注
+	Status      int8   `json:"status"`      //子账号状态 1=正常 2=禁用
 }

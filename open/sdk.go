@@ -69,7 +69,9 @@ const (
 	// 获取订单列表
 	GetOrderListUri = "/api/open/app/order/list/" + VERSION
 	// 获取实列列表
-	GetInstanceListUri = "/api/open/app/instance/list/" + VERSION
+	GetInstanceListUri       = "/api/open/app/instance/list/" + VERSION
+	SetProxyUserFlowLimitUri = "/api/open/app/proxy/user/flow/limit/" + VERSION
+	GetProxyUserInfoUri      = "/api/open/app/proxy/user/info/" + VERSION
 
 	Encrypt_AES = "AES" //aes cbc模式
 )
@@ -423,6 +425,29 @@ func (c *IpvClient) GetInstanceList(params dto.AppGetInstanceListReq) (resp *dto
 	return
 }
 
+// 设置子账户流量上限
+func (c *IpvClient) SetProxyUserFlowLimit(params dto.AppSetProxyUserFlowLimitReq) (err error) {
+	_, err = c.postData(SetProxyUserFlowLimitUri, params)
+	if err != nil {
+		return fmt.Errorf("%s %w", SetProxyUserFlowLimitUri, err)
+	}
+	return
+}
+
+// 获取子账户信息
+func (c *IpvClient) GetProxyUserInfo(params dto.AppProxyUserInfoReq) (resp *dto.AppProxyUserInfoResp, err error) {
+	data, err := c.postData(GetProxyUserInfoUri, params)
+	if err != nil {
+		return resp, fmt.Errorf("%s %w", GetProxyUserInfoUri, err)
+	}
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		slog.Error("ipipv_sdk", "GetProxyUserInfo-json.Unmarshal", err)
+		return
+	}
+	return
+}
+
 func (c *IpvClient) postData(uri string, params any) (resData []byte, err error) {
 	aoReq := dto.AppOpenReq{
 		Version: VERSION,
@@ -509,6 +534,9 @@ func (c *IpvClient) postData(uri string, params any) (resData []byte, err error)
 		return nil, fmt.Errorf("[code]=%d,[msg]=%s", res.Code, res.Msg)
 	}
 
+	if res.Data == "" {
+		return nil, nil
+	}
 	encrypted, err := base64.StdEncoding.DecodeString(res.Data)
 	if err != nil {
 		return nil, err
