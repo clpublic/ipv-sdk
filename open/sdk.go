@@ -72,6 +72,7 @@ const (
 	GetInstanceListUri       = "/api/open/app/instance/list/" + VERSION
 	SetProxyUserFlowLimitUri = "/api/open/app/proxy/user/flow/limit/" + VERSION
 	GetProxyUserInfoUri      = "/api/open/app/proxy/user/info/" + VERSION
+	InstanceAfterSaleUri     = "/api/open/app/instance/aftersale/" + VERSION
 
 	Encrypt_AES = "AES" //aes cbc模式
 )
@@ -443,6 +444,20 @@ func (c *IpvClient) GetProxyUserInfo(params dto.AppProxyUserInfoReq) (resp *dto.
 	err = json.Unmarshal(data, &resp)
 	if err != nil {
 		slog.Error("ipipv_sdk", "GetProxyUserInfo-json.Unmarshal", err)
+		return
+	}
+	return
+}
+
+// InstanceAfterSale
+func (c *IpvClient) InstanceAfterSale(params dto.AppInstanceAfterSaleReleaseReq) (resp *dto.AppInstanceAfterSaleReleaseResp, err error) {
+	data, err := c.postData(InstanceAfterSaleUri, params)
+	if err != nil {
+		return resp, fmt.Errorf("%s %w", InstanceAfterSaleUri, err)
+	}
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		slog.Error("ipipv_sdk", "InstanceAfterSaleUri-json.Unmarshal", err, "resp", string(data))
 		return
 	}
 	return

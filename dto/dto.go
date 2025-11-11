@@ -607,3 +607,22 @@ type AppProxyUserInfoResp struct {
 	Remark      string `json:"remark"`      //备注
 	Status      int8   `json:"status"`      //子账号状态 1=正常 2=禁用
 }
+
+type AppInstanceAfterSaleReleaseReq struct {
+	OrderNo          string         `json:"orderNo"`          //订单号(渠道商订单号)
+	Instances        []string       `json:"instances"`        //平台实例编号
+	Remark           string         `json:"remark"`           //备注
+	Reason           string         `json:"reason"`           //原因
+	DingTalkUserList []DingTalkUser `json:"dingTalkUserList"` //用户列表
+}
+
+type DingTalkUser struct {
+	Uid   string `json:"uid"`   //
+	Phone string `json:"phone"` //
+}
+
+type AppInstanceAfterSaleReleaseResp struct {
+	OrderNo    string `json:"orderNo"`    //平台订单号
+	AppOrderNo string `json:"appOrderNo"` //购买者订单号(渠道商订单号) 原样返回
+	Amount     string `json:"amount"`     //金额
+}

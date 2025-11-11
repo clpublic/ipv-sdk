@@ -339,3 +339,19 @@ func TestIpvClient_GetProxyUserInfo(t *testing.T) {
 	}
 	t.Logf("%+v", ps)
 }
+
+func TestIpvClient_InstanceAfterSale(t *testing.T) {
+	o := dto.AppInstanceAfterSaleReleaseReq{
+		OrderNo:          "",
+		Instances:        nil,
+		Remark:           "",
+		Reason:           "",
+		DingTalkUserList: nil,
+	}
+	ps, err := getClient().InstanceAfterSale(o)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	t.Logf("%+v", ps)
+}
