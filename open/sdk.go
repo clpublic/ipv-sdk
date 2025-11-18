@@ -560,3 +560,7 @@ func (c *IpvClient) postData(uri string, params any) (resData []byte, err error)
 
 	//return json.Marshal(res.Data)
 }
+
+func (c *IpvClient) PostData(uri string, params any) (resData []byte, err error) {
+	return c.postData(uri, params)
+}
