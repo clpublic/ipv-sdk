@@ -464,7 +464,7 @@ func (c *IpvClient) InstanceAfterSale(params dto.AppInstanceAfterSaleReleaseReq)
 	return
 }
 
-func (c *IpvClient) GetProjectList(params dto.AppProjectListReq) (resp *dto.AppProjectListResp, err error) {
+func (c *IpvClient) GetProjectList(params dto.AppProjectListReq) (resp []dto.AppProjectListResp, err error) {
 	data, err := c.postData(GetProjectListUri, params)
 	if err != nil {
 		return resp, fmt.Errorf("%s %w", GetProjectListUri, err)
