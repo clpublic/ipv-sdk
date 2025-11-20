@@ -643,3 +643,8 @@ type ProjectItem struct {
 	Code      string `json:"code"`      // id
 	Inventory int    `json:"inventory"` // 库存
 }
+
+// 获取产品信息请求
+type AppProductInfoReq struct {
+	ProductNo string `json:"productNo"` //产品编号 必填
+}
