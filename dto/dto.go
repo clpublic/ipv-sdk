@@ -92,6 +92,7 @@ type AppProductSyncResp struct {
 	FlowUseLog           int                `json:"flowUseLog"`           //动态代理是否支持流量明细查询 1=是 -1=否 默认为否 新增于2025/09/5
 	PwdDrawSessionRange  string             `json:"pwdDrawSessionRange"`  //动态代理账密流量提取持续时间范围 单位分钟 新增于2025/09/5
 	FlowConversionBase   int                `json:"flowConversionBase"`   //动态代理流量单位转化基准 1000 或者 1024 0表示未知或不支持  新增于2025/09/5
+	ProjectList          []ProjectItem      `json:"projectList"`          // projectList
 }
 
 // 下架网段 新增 2025/0707
@@ -103,10 +104,11 @@ type OfflineCIDRBlock struct {
 // 新增 2024/06/27
 // 网段
 type CIDRBlock struct {
-	CIDR  string `json:"cidr"`  // 网段 192.168.0.0/24 172.16.0.0/16 10.0.0.0/8
-	Count int    `json:"count"` // 网段ip数量 购买代理的时候如果传了网段 该字段必传
-	Asn   string `json:"asn"`   // 该网段属于哪个asn 购买代理的时候可选 新增 2024/09/21
-	Isp   string `json:"isp"`   // 该网段属于哪个网络提供商 购买代理的时候可选 新增 2024/10/10
+	CIDR        string        `json:"cidr"`        // 网段 192.168.0.0/24 172.16.0.0/16 10.0.0.0/8
+	Count       int           `json:"count"`       // 网段ip数量 购买代理的时候如果传了网段 该字段必传
+	Asn         string        `json:"asn"`         // 该网段属于哪个asn 购买代理的时候可选 新增 2024/09/21
+	Isp         string        `json:"isp"`         // 该网段属于哪个网络提供商 购买代理的时候可选 新增 2024/10/10
+	ProjectList []ProjectItem `json:"projectList"` // projectList
 }
 
 // 创建或修改主账号请求
@@ -625,4 +627,19 @@ type AppInstanceAfterSaleReleaseResp struct {
 	OrderNo    string `json:"orderNo"`    //平台订单号
 	AppOrderNo string `json:"appOrderNo"` //购买者订单号(渠道商订单号) 原样返回
 	Amount     string `json:"amount"`     //金额
+}
+
+type AppProjectListReq struct {
+	Codes []string `json:"codes" form:"codes"` //项目代码列表，为null获取全部
+}
+
+type AppProjectListResp struct {
+	Code   string `json:"code"`   //项目代码
+	Name   string `json:"name"`   //项目名称
+	Status int    `json:"status"` //状态 1=上架 -1=下架
+}
+
+type ProjectItem struct {
+	Code      string `json:"code"`      // id
+	Inventory int    `json:"inventory"` // 库存
 }
