@@ -92,7 +92,8 @@ type AppProductSyncResp struct {
 	FlowUseLog           int                `json:"flowUseLog"`           //动态代理是否支持流量明细查询 1=是 -1=否 默认为否 新增于2025/09/5
 	PwdDrawSessionRange  string             `json:"pwdDrawSessionRange"`  //动态代理账密流量提取持续时间范围 单位分钟 新增于2025/09/5
 	FlowConversionBase   int                `json:"flowConversionBase"`   //动态代理流量单位转化基准 1000 或者 1024 0表示未知或不支持  新增于2025/09/5
-	ProjectList          []ProjectItem      `json:"projectList"`          // projectList
+	ProjectList          []ProjectItem      `json:"projectList"`          // ProjectList
+	ProductType          int                `json:"productType"`          // 2=share
 }
 
 // 下架网段 新增 2025/0707
