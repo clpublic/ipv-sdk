@@ -73,6 +73,8 @@ const (
 	SetProxyUserFlowLimitUri = "/api/open/app/proxy/user/flow/limit/" + VERSION
 	GetProxyUserInfoUri      = "/api/open/app/proxy/user/info/" + VERSION
 	InstanceAfterSaleUri     = "/api/open/app/instance/aftersale/" + VERSION
+	GetProjectListUri        = "/api/open/app/project/list/" + VERSION
+	GetProductInfoUri        = "/api/open/app/product/info/" + VERSION
 
 	Encrypt_AES = "AES" //aes cbc模式
 )
@@ -449,7 +451,6 @@ func (c *IpvClient) GetProxyUserInfo(params dto.AppProxyUserInfoReq) (resp *dto.
 	return
 }
 
-// InstanceAfterSale
 func (c *IpvClient) InstanceAfterSale(params dto.AppInstanceAfterSaleReleaseReq) (resp *dto.AppInstanceAfterSaleReleaseResp, err error) {
 	data, err := c.postData(InstanceAfterSaleUri, params)
 	if err != nil {
@@ -458,6 +459,32 @@ func (c *IpvClient) InstanceAfterSale(params dto.AppInstanceAfterSaleReleaseReq)
 	err = json.Unmarshal(data, &resp)
 	if err != nil {
 		slog.Error("ipipv_sdk", "InstanceAfterSaleUri-json.Unmarshal", err, "resp", string(data))
+		return
+	}
+	return
+}
+
+func (c *IpvClient) GetProjectList(params dto.AppProjectListReq) (resp []dto.AppProjectListResp, err error) {
+	data, err := c.postData(GetProjectListUri, params)
+	if err != nil {
+		return resp, fmt.Errorf("%s %w", GetProjectListUri, err)
+	}
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		slog.Error("ipipv_sdk", "GetProjectList-json.Unmarshal", err)
+		return
+	}
+	return
+}
+
+func (c *IpvClient) GetProductInfo(params dto.AppProductInfoReq) (resp *dto.AppProductSyncResp, err error) {
+	data, err := c.postData(GetProductInfoUri, params)
+	if err != nil {
+		return resp, fmt.Errorf("%s %w", GetProductInfoUri, err)
+	}
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		slog.Error("ipipv_sdk", "GetProductInfo-json.Unmarshal", err)
 		return
 	}
 	return
