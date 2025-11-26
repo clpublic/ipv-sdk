@@ -75,6 +75,7 @@ const (
 	InstanceAfterSaleUri     = "/api/open/app/instance/aftersale/" + VERSION
 	GetProjectListUri        = "/api/open/app/project/list/" + VERSION
 	GetProductInfoUri        = "/api/open/app/product/info/" + VERSION
+	InstanceResetPasswordUri = "/api/open/app/instance/reset/password/" + VERSION
 
 	Encrypt_AES = "AES" //aes cbc模式
 )
@@ -485,6 +486,19 @@ func (c *IpvClient) GetProductInfo(params dto.AppProductInfoReq) (resp *dto.AppP
 	err = json.Unmarshal(data, &resp)
 	if err != nil {
 		slog.Error("ipipv_sdk", "GetProductInfo-json.Unmarshal", err)
+		return
+	}
+	return
+}
+
+func (c *IpvClient) ResetProxyPassword(params dto.AppResetProxyPasswordReq) (resp *dto.AppResetProxyPasswordResp, err error) {
+	data, err := c.postData(InstanceResetPasswordUri, params)
+	if err != nil {
+		return resp, fmt.Errorf("%s %w", InstanceResetPasswordUri, err)
+	}
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		slog.Error("ipipv_sdk", "InstanceResetPasswordUri-json.Unmarshal", err, "resp", string(data))
 		return
 	}
 	return

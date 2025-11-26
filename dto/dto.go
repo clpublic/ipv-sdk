@@ -94,6 +94,7 @@ type AppProductSyncResp struct {
 	FlowConversionBase   int                `json:"flowConversionBase"`   //动态代理流量单位转化基准 1000 或者 1024 0表示未知或不支持  新增于2025/09/5
 	ProjectList          []ProjectItem      `json:"projectList"`          // ProjectList
 	ProductType          int                `json:"productType"`          // 2=share
+	ResetPassword        int                `json:"resetPassword"`        // 代理是否支持重置密码 1=是 -1=否 默认为否
 }
 
 // 下架网段 新增 2025/0707
@@ -648,4 +649,22 @@ type ProjectItem struct {
 // 获取产品信息请求
 type AppProductInfoReq struct {
 	ProductNo string `json:"productNo"` //产品编号 必填
+}
+
+// 重置实例密码请求
+type AppResetProxyPasswordReq struct {
+	InstanceNoList []string `json:"instanceNoList"` //实例编号数组 必填
+	ResetNo        string   `json:"resetNo"`        //重置单号 必填 平台根据该单号做幂等判断，同样的单号重复请求只会处理第一次的请求，之后的请求只会返回第一次的结果 最长32位，只能包含字母、数字、下划线
+}
+
+// 重置实例密码返回
+type AppResetProxyPasswordResp struct {
+	List    []AppResetProxyPasswordResult `json:"list"`    //重置结果列表
+	ResetNo string                        `json:"resetNo"` //重置单号 平台自动生成或者渠道商传递
+}
+
+type AppResetProxyPasswordResult struct {
+	InstanceNo  string `json:"instanceNo"`  //实例编号
+	NewPassword string `json:"newPassword"` //新密码 如果为空 说明还在处理中或者处理失败
+	Status      int8   `json:"status"`      //状态 1待处理 2处理中 3成功 4失败
 }
