@@ -220,7 +220,7 @@ func (c *IpvClient) GetInstance(params dto.AppGetInstanceReq) (resp []dto.AppIns
 }
 
 // 更换代理
-func (c *IpvClient) ChangeProxy(params dto.AppChangeProxyReq) (resp []dto.AppInstanceResp, err error) {
+func (c *IpvClient) ChangeProxy(params dto.AppChangeProxyReq) (resp *dto.AppChangeProxyResp, err error) {
 	data, err := c.postData(InstanceChangeUri, params)
 	if err != nil {
 		return nil, err

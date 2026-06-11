@@ -95,6 +95,7 @@ type AppProductSyncResp struct {
 	ProjectList          []ProjectItem      `json:"projectList"`          // ProjectList
 	ProductType          int                `json:"productType"`          // 2=共享
 	ResetPassword        int                `json:"resetPassword"`        // 代理是否支持重置密码 1=是 -1=否 默认为否
+	ChangeProxy          int                `json:"changeProxy"`          // 代理是否支持更换代理 1=支持 -1=不支持 默认不支持
 	AsnAttr              int8               `json:"asnAttr"`              // 产品asn属性 0=未知,1=ISP,2=IDC,3=BUS 新增于2026/02/09
 }
 
@@ -184,7 +185,7 @@ type AppGetOrderReq struct {
 type AppOrderResp struct {
 	OrderNo    string            `json:"orderNo"`    //平台订单号
 	AppOrderNo string            `json:"appOrderNo"` //渠道商（购买方）订单编号
-	Type       int8              `json:"type"`       //订单类型 1=新建 2=续费 3=释放
+	Type       int8              `json:"type"`       //订单类型 1=新建 2=续费 3=释放 5=更换代理
 	Status     int8              `json:"status"`     //订单状态 1=待处理 2=处理中 3=处理成功 4=处理失败 5=部分完成
 	Count      int               `json:"count"`      //购买数量
 	Amount     string            `json:"amount"`     //总价
@@ -202,7 +203,19 @@ type AppGetInstanceReq struct {
 
 // 更换代理请求
 type AppChangeProxyReq struct {
+	InstanceNo       string      `json:"instanceNo"`       //平台实例编号
+	AppOrderNo       string      `json:"appOrderNo"`       //渠道商更换代理订单号，同一渠道商下必须唯一，重复提交会返回已有更换订单
+	TargetProductNo  string      `json:"targetProductNo"`  //可选，替换到指定平台产品下的 IP 预留字段，暂不支持
+	TargetCIDRBlocks []CIDRBlock `json:"targetCidrBlocks"` //可选，替换到指定 IP 段下的 IP 预留字段，暂不支持
+	Reason           string      `json:"reason"`           //可选，更换原因，最多 64 字符
+}
+
+// 更换代理返回
+type AppChangeProxyResp struct {
+	OrderNo    string `json:"orderNo"`    //平台更换代理订单号
+	AppOrderNo string `json:"appOrderNo"` //渠道商更换代理订单号
 	InstanceNo string `json:"instanceNo"` //平台实例编号
+	Status     int8   `json:"status"`     //更换状态 1=待处理 2=处理中 3=处理成功 4=处理失败
 }
 
 // 实例返回

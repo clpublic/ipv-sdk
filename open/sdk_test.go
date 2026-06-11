@@ -91,6 +91,7 @@ func TestGetInstance(t *testing.T) {
 func TestIpvClient_ChangeProxy(t *testing.T) {
 	o := dto.AppChangeProxyReq{
 		InstanceNo: "c_gzmtux84eu8ipkq",
+		AppOrderNo: getOrderNo(),
 	}
 	ps, err := getClient().ChangeProxy(o)
 	if err != nil {
