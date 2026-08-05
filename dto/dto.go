@@ -4,6 +4,20 @@ import (
 	"time"
 )
 
+// ASNType IP 所属 ASN 的网络类型。
+type ASNType uint
+
+const (
+	// ASNTypeUnknown 类型未知。
+	ASNTypeUnknown ASNType = 0
+	// ASNTypeISP 运营商或住宅网络。
+	ASNTypeISP ASNType = 1
+	// ASNTypeHosting 托管或数据中心网络。
+	ASNTypeHosting ASNType = 2
+	// ASNTypeBusiness 商业网络。
+	ASNTypeBusiness ASNType = 3
+)
+
 // 请求统一为密文传输
 type AppOpenReq struct {
 	ReqId   string `json:"reqId"`   // 请求id，每次生成，如果失败重复请求，保持不变
@@ -222,6 +236,7 @@ type AppChangeProxyResp struct {
 type AppInstanceResp struct {
 	InstanceNo  string    `json:"instanceNo"`  //平台实例编号（渠道商续费和释放操作使用该编号）
 	ProxyType   uint      `json:"proxyType"`   //代理类型 101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
+	ASNType     ASNType   `json:"asnType"`     //ASN类型 0=未知 1=ISP 2=Hosting 3=Business
 	Protocol    string    `json:"protocol" `   //协议类型 多个用英文逗号分隔 1=socks5 2=http 3=https 4=ssh
 	Ip          string    `json:"ip"`          //代理地址 用户实际代理访问使用
 	Port        uint      `json:"port"`        //代理端口
