@@ -706,3 +706,15 @@ type AppResetProxyPasswordResult struct {
 	NewPassword string `json:"newPassword"` //新密码 如果为空 说明还在处理中或者处理失败
 	Status      int8   `json:"status"`      //状态 1待处理 2处理中 3成功 4失败
 }
+
+// 获取下架批次资源列表请求
+type AppResourceOfflineListReq struct {
+	BatchNo string `json:"batchNo"` //下架批次号
+}
+
+// 获取下架批次资源列表返回
+type AppResourceOfflineListResp struct {
+	BatchNo  string   `json:"batchNo"`  //下架批次号
+	IpList   []string `json:"ipList"`   //下架IP列表
+	CidrList []string `json:"cidrList"` //下架IP段列表
+}
