@@ -352,3 +352,15 @@ func TestIpvClient_GetProxyUserInfo(t *testing.T) {
 	}
 	t.Logf("%+v", ps)
 }
+
+func TestIpvClient_GetResourceOfflineList(t *testing.T) {
+	o := dto.AppResourceOfflineListReq{
+		BatchNo: "", //
+	}
+	ps, err := getClient().GetResourceOfflineList(o)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	t.Logf("%+v", ps)
+}

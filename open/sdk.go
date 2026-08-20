@@ -71,13 +71,14 @@ const (
 	// 获取订单列表
 	GetOrderListUri = "/api/open/app/order/list/" + VERSION
 	// 获取实列列表
-	GetInstanceListUri       = "/api/open/app/instance/list/" + VERSION
-	SetProxyUserFlowLimitUri = "/api/open/app/proxy/user/flow/limit/" + VERSION
-	GetProxyUserInfoUri      = "/api/open/app/proxy/user/info/" + VERSION
-	InstanceAfterSaleUri     = "/api/open/app/instance/aftersale/" + VERSION
-	GetProjectListUri        = "/api/open/app/project/list/" + VERSION
-	GetProductInfoUri        = "/api/open/app/product/info/" + VERSION
-	InstanceResetPasswordUri = "/api/open/app/instance/reset/password/" + VERSION
+	GetInstanceListUri        = "/api/open/app/instance/list/" + VERSION
+	SetProxyUserFlowLimitUri  = "/api/open/app/proxy/user/flow/limit/" + VERSION
+	GetProxyUserInfoUri       = "/api/open/app/proxy/user/info/" + VERSION
+	InstanceAfterSaleUri      = "/api/open/app/instance/aftersale/" + VERSION
+	GetProjectListUri         = "/api/open/app/project/list/" + VERSION
+	GetProductInfoUri         = "/api/open/app/product/info/" + VERSION
+	InstanceResetPasswordUri  = "/api/open/app/instance/reset/password/" + VERSION
+	GetResourceOfflineListUri = "/api/open/app/resource/offline/list/" + VERSION
 
 	Encrypt_AES = "AES" //aes cbc模式
 )
@@ -514,6 +515,19 @@ func (c *IpvClient) ResetProxyPassword(params dto.AppResetProxyPasswordReq) (res
 	err = json.Unmarshal(data, &resp)
 	if err != nil {
 		slog.Error("ipipv_sdk", "InstanceResetPasswordUri-json.Unmarshal", err, "resp", string(data))
+		return
+	}
+	return
+}
+
+func (c *IpvClient) GetResourceOfflineList(params dto.AppResourceOfflineListReq) (resp *dto.AppResourceOfflineListResp, err error) {
+	data, err := c.postData(GetResourceOfflineListUri, params)
+	if err != nil {
+		return resp, fmt.Errorf("%s %w", GetResourceOfflineListUri, err)
+	}
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		slog.Error("ipipv_sdk", "GetResourceOfflineListUri-json.Unmarshal", err, "resp", string(data))
 		return
 	}
 	return
