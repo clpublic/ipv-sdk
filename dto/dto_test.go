@@ -29,3 +29,14 @@ func TestAppChangeProxyReqMarshal(t *testing.T) {
 		t.Fatalf("unexpected json: %s", data)
 	}
 }
+
+func TestAppProductSyncRespUnmarshalAsnType(t *testing.T) {
+	var resp AppProductSyncResp
+	if err := json.Unmarshal([]byte(`{"productNo":"product_1","asnType":3}`), &resp); err != nil {
+		t.Fatal(err)
+	}
+
+	if resp.AsnType != 3 {
+		t.Fatalf("unexpected asnType: %d", resp.AsnType)
+	}
+}
