@@ -76,6 +76,7 @@ type AppProductSyncResp struct {
 	IpType               int                `json:"ipType"`               //ip类型 1=ipv4 2=ipv6 3=随机 默认1
 	IspType              int                `json:"ispType"`              //ispType 1=单isp 2=双isp
 	NetType              int                `json:"netType"`              //网络类型 1=原生 2=广播
+	AsnType              int                `json:"asnType"`              //资源类型 0=未知 1=ISP 2=IDC 3=BUS；0为合法值并始终返回
 	Duration             int                `json:"duration"`             //必要 时长 0无限制
 	Unit                 int                `json:"unit"`                 //单位 1=天 2=周(7天) 3=月(自然月) 4=年(自然年365，366)
 	BandWidth            int                `json:"bandWidth"`            //带宽|流量时必要 单位 MB
