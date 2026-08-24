@@ -333,6 +333,7 @@ type AppInstanceRenewResp struct {
 type AppInstanceReleaseReq struct {
 	OrderNo   string   `json:"orderNo"`   //购买者订单号(渠道商订单号)
 	Instances []string `json:"instances"` //平台实例编号
+	Reason    string   `json:"reason"`    //释放原因 最多2000字符
 }
 
 // 释放代理资源返回
