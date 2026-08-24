@@ -157,6 +157,7 @@ func TestInstanceRelease(t *testing.T) {
 	o := dto.AppInstanceReleaseReq{
 		OrderNo:   getOrderNo(),
 		Instances: []string{"c_gzraaycyuhps5pg"}, // c_gzmycfycqejct4m  ip90=>c_gzmk5maz55cv536 aws=>c_gzmk7asab4wy6vp
+		Reason:    "测试释放",
 	}
 	ps, err := getClient().InstanceRelease(o)
 	if err != nil {
