@@ -277,8 +277,11 @@ type AppAreaResp struct {
 
 // 开通代理资源请求
 type AppInstanceOpenReq struct {
-	AppOrderNo string      `json:"appOrderNo"` //购买者订单号(渠道商订单号)
-	Params     []OpenParam `json:"params"`     //购买代理产品列表
+	AppOrderNo         string      `json:"appOrderNo"`         //购买者订单号(渠道商订单号)
+	UserId             string      `json:"userId"`             //渠道商用户唯一标识，最长32个字符 新增于2026/08/26
+	ExcludeUserHistory int8        `json:"excludeUserHistory"` //是否排除用户历史代理，0=否 1=是，默认为0 新增于2026/08/26
+	ExcludeIp          string      `json:"excludeIp"`          //需要排除的代理ip，多个ip使用英文逗号分隔，最多16个 新增于2026/08/26
+	Params             []OpenParam `json:"params"`             //购买代理产品列表
 }
 
 type OpenParam struct {

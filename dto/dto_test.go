@@ -30,6 +30,25 @@ func TestAppChangeProxyReqMarshal(t *testing.T) {
 	}
 }
 
+func TestAppInstanceOpenReqMarshalExtraParams(t *testing.T) {
+	req := AppInstanceOpenReq{
+		AppOrderNo:         "order_1",
+		UserId:             "user_1",
+		ExcludeUserHistory: 1,
+		ExcludeIp:          "1.2.3.4,5.6.7.8",
+	}
+
+	data, err := json.Marshal(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	want := `{"appOrderNo":"order_1","userId":"user_1","excludeUserHistory":1,"excludeIp":"1.2.3.4,5.6.7.8","params":null}`
+	if string(data) != want {
+		t.Fatalf("unexpected json: %s", data)
+	}
+}
+
 func TestAppProductSyncRespUnmarshalAsnType(t *testing.T) {
 	var resp AppProductSyncResp
 	if err := json.Unmarshal([]byte(`{"productNo":"product_1","asnType":3}`), &resp); err != nil {
