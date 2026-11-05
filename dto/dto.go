@@ -73,6 +73,7 @@ type AppProductSyncResp struct {
 	Detail               string             `json:"detail"`               //商品描述
 	CostPrice            string             `json:"costPrice"`            //必要 价格
 	Inventory            int                `json:"inventory"`            //必要 库存
+	TotalInventory       *uint              `json:"totalInventory"`       //IP总库存，包含已用与可用；null表示供应商未提供
 	IpType               int                `json:"ipType"`               //ip类型 1=ipv4 2=ipv6 3=随机 默认1
 	IspType              int                `json:"ispType"`              //ispType 1=单isp 2=双isp
 	NetType              int                `json:"netType"`              //网络类型 1=原生 2=广播
@@ -123,11 +124,17 @@ type OfflineCIDRBlock struct {
 // 新增 2024/06/27
 // 网段
 type CIDRBlock struct {
-	CIDR        string        `json:"cidr"`        // 网段 192.168.0.0/24 172.16.0.0/16 10.0.0.0/8
-	Count       int           `json:"count"`       // 网段ip数量 购买代理的时候如果传了网段 该字段必传
-	Asn         string        `json:"asn"`         // 该网段属于哪个asn 购买代理的时候可选 新增 2024/09/21
-	Isp         string        `json:"isp"`         // 该网段属于哪个网络提供商 购买代理的时候可选 新增 2024/10/10
-	ProjectList []ProjectItem `json:"projectList"` // projectList
+	CIDR           string        `json:"cidr"`           // 网段 192.168.0.0/24 172.16.0.0/16 10.0.0.0/8
+	Count          int           `json:"count"`          // 网段ip数量 购买代理的时候如果传了网段 该字段必传
+	Asn            string        `json:"asn"`            // 该网段属于哪个asn 购买代理的时候可选 新增 2024/09/21
+	Isp            string        `json:"isp"`            // 该网段属于哪个网络提供商 购买代理的时候可选 新增 2024/10/10
+	NetType        int           `json:"netType"`        // 网络类型 0=未知 1=原生 2=广播
+	AsnType        int           `json:"asnType"`        // IP资源类型 0=未知 1=家庭ISP 2=机房IDC 3=商业
+	CostPrice      *string       `json:"costPrice"`      // 成本价，单位元，null表示未知
+	RiskLevel      string        `json:"riskLevel"`      // 风险等级 空字符串=未知 低 中 高 极高
+	FraudScore     *uint         `json:"fraudScore"`     // 欺诈分数 null表示未知
+	TotalInventory *uint         `json:"totalInventory"` // IP段总库存，包含已用与可用；null表示未知
+	ProjectList    []ProjectItem `json:"projectList"`    // projectList
 }
 
 // 创建或修改主账号请求
