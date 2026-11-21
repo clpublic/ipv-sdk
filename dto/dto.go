@@ -98,6 +98,7 @@ type AppProductSyncResp struct {
 	ParentNo             string             `json:"parentNo"`             //父产品编号 新增于2024/10/15
 	CIDRStatus           int                `json:"cidrStatus"`           //ip段支持状态 1=支持 -1=不支持 默认为-1 新增于2024/10/15
 	OneDay               int                `json:"oneDay"`               //是否支持1天的测试 1=是 -1=否 新增于2024/10/17
+	AllowCustomDays      int                `json:"allowCustomDays"`      //是否允许V2指定天数首购：1=允许 -1=不允许；由产品范围、真实供应商及渠道商双开关共同决定，未返回时为0，仅1表示允许
 	OfflineCIDRBlocks    []OfflineCIDRBlock `json:"offlineCidrBlocks"`    //最近1个月下架的网段 新增 2025/07/07
 	ProxyEverytimeChange int                `json:"proxyEverytimeChange"` //动态代理账密提取 是否支持每次更换代理  1=是 -1=否 默认为否 新增于2025/08/14
 	ProxyGlobalRandom    int                `json:"proxyGlobalRandom"`    //动态代理提取 是否支持全球混播 1=是 -1=否 默认为否 新增于2025/08/14
@@ -292,6 +293,9 @@ type AppInstanceOpenReq struct {
 }
 
 type OpenParam struct {
+	// Days 指定首购天数，当前支持1～15天，必须传productNo；传入时忽略unit/duration/cycleTimes。
+	// nil沿用原周期开通逻辑；显式0会传给服务端并报错，后续续费按产品完整周期。
+	Days         *int32      `json:"days,omitempty"`
 	ProductNo    string      `json:"productNo"`    //产品编号（如果存在，后面7项无意义）
 	ProxyType    uint16      `json:"proxyType"`    //代理类型（匹配产品用，如果产品编号有值忽略该项） 101=静态云平台 102=静态国内家庭 103=静态国外家庭 104=动态国外 105=动态国内 201=whatsapp
 	CountryCode  string      `json:"countryCode"`  //国家代码（匹配产品用，如果产品编号有值忽略该项）
@@ -310,7 +314,7 @@ type OpenParam struct {
 	UseBridge    uint8       `json:"useBridge"`    //是否使用桥 0=随app设置 1=不使用桥 2=使用桥 默认0
 	CIDRBlocks   []CIDRBlock `json:"cidrBlocks"`   //静态购买所在网段及数量（产品有的才支持） 2024/06/27新增
 	ProjectId    string      `json:"projectId"`    //购买项目id
-	CycleTimes   int32       `json:"cycleTimes"`   //购买时长周期数，此字段对有时长的产品有意义，默认1 表示产品的unit * duration 如果该字段大于0 duration字段不作为购买时长使用 2024/09/21新增
+	CycleTimes   int32       `json:"cycleTimes"`   //购买时长周期数，此字段对有时长的产品有意义，默认1 表示产品的unit * duration 如果该字段大于0 duration字段不作为购买时长使用；传入days时忽略 2024/09/21新增
 }
 
 // 开通代理资源返回
@@ -328,8 +332,8 @@ type AppInstanceRenewReq struct {
 
 type Instance struct {
 	InstanceNo string `json:"instanceNo"` //平台实例编号
-	Duration   int32  `json:"duration"`   //可选 时长 续费的时候默认是购买的时候的时长
-	CycleTimes int32  `json:"cycleTimes"` //可选 购买时长周期数，此字段对有时长的产品有意义，默认1 表示cycleTimes个产品的最低单位时长 有这个优先使用 2024/10/25新增
+	Duration   int32  `json:"duration"`   //可选 时长，普通实例默认购买时长；指定天数首购实例默认续费1个完整产品周期，不继承首购天数
+	CycleTimes int32  `json:"cycleTimes"` //可选 购买时长周期数，此字段对有时长的产品有意义，默认1 表示cycleTimes个产品的最低单位时长 有这个优先使用；指定天数首购实例推荐使用此字段按完整产品周期续费 2024/10/25新增
 }
 
 // 续费代理资源返回
@@ -542,13 +546,16 @@ type AppProxyReturnResp struct {
 
 // 指定ip开通代理资源请求
 type AppAssignIpInstanceOpenReq struct {
+	// Days 指定首购天数，当前支持1～15天；传入时忽略cycleTimes。
+	// nil沿用原产品周期，显式0会报错；仍必须传productNo和assignIp，后续续费按产品完整周期。
+	Days         *int32 `json:"days,omitempty"`
 	AppOrderNo   string `json:"appOrderNo"`   //购买者订单号(渠道商订单号) 必须
 	ProductNo    string `json:"productNo"`    //产品编号 必须 但是指定购买成功的ip不一定和产品的所属区域一致
 	Renew        bool   `json:"renew"`        //是否自动续费 1自动续费 默认0
 	ExtBandWidth int32  `json:"extBandWidth"` //额外增加带宽 单位Mbps
 	UseBridge    uint8  `json:"useBridge"`    //是否使用桥 0=随app设置 1=不使用桥 2=使用桥 默认0
 	AssignIp     string `json:"assignIp"`     //指定ip购买 必须
-	CycleTimes   int32  `json:"cycleTimes"`   //购买时长周期数，此字段对有时长的产品有意义，默认1 表示cycleTimes个产品的最低单位时长  必须
+	CycleTimes   int32  `json:"cycleTimes"`   //购买时长周期数，表示cycleTimes个产品的最低单位时长；未传days时必须大于0，传入days时忽略
 }
 
 // 获取指定ip是否可以创建代理
