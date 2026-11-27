@@ -79,6 +79,8 @@ const (
 	GetProductInfoUri         = "/api/open/app/product/info/" + VERSION
 	InstanceResetPasswordUri  = "/api/open/app/instance/reset/password/" + VERSION
 	GetResourceOfflineListUri = "/api/open/app/resource/offline/list/" + VERSION
+	// 获取当前渠道商下架/即将下架代理IP列表
+	GetSupplierOfflineListUri = "/api/open/app/instance/offline/list/" + VERSION
 
 	Encrypt_AES = "AES" //aes cbc模式
 )
@@ -528,6 +530,21 @@ func (c *IpvClient) GetResourceOfflineList(params dto.AppResourceOfflineListReq)
 	err = json.Unmarshal(data, &resp)
 	if err != nil {
 		slog.Error("ipipv_sdk", "GetResourceOfflineListUri-json.Unmarshal", err, "resp", string(data))
+		return
+	}
+	return
+}
+
+// GetSupplierOfflineList 获取当前渠道商下架/即将下架的代理IP列表。
+// 与按批次回查的 GetResourceOfflineList 不同，本接口按渠道实例查询供应商下架状态。
+func (c *IpvClient) GetSupplierOfflineList(params dto.AppSupplierOfflineListReq) (resp *dto.AppSupplierOfflineListResp, err error) {
+	data, err := c.postData(GetSupplierOfflineListUri, params)
+	if err != nil {
+		return resp, fmt.Errorf("%s %w", GetSupplierOfflineListUri, err)
+	}
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		slog.Error("ipipv_sdk", "GetSupplierOfflineList-json.Unmarshal", err, "resp", string(data))
 		return
 	}
 	return

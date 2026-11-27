@@ -5,6 +5,54 @@ import (
 	"testing"
 )
 
+func TestAppSupplierOfflineListDTOMarshal(t *testing.T) {
+	// 不传 offlineStatus/page/pageSize 时保持空对象，由服务端使用默认值。
+	data, err := json.Marshal(AppSupplierOfflineListReq{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(data) != `{}` {
+		t.Fatalf("unexpected empty request json: %s", data)
+	}
+
+	status := SupplierOfflineStatusPending
+	data, err = json.Marshal(AppSupplierOfflineListReq{
+		OfflineStatus: &status,
+		Page:          1,
+		PageSize:      100,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want := `{"offlineStatus":2,"page":1,"pageSize":100}`; string(data) != want {
+		t.Fatalf("unexpected request json: %s, want %s", data, want)
+	}
+
+	offlineTime := "2026-11-27 09:30:12"
+	data, err = json.Marshal(AppSupplierOfflineItem{
+		Ip:            "192.0.2.1",
+		OfflineStatus: SupplierOfflineStatusOffline,
+		OfflineTime:   &offlineTime,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want := `{"ip":"192.0.2.1","offlineStatus":-1,"offlineTime":"2026-11-27 09:30:12"}`; string(data) != want {
+		t.Fatalf("unexpected offline item json: %s, want %s", data, want)
+	}
+
+	data, err = json.Marshal(AppSupplierOfflineItem{
+		Ip:            "192.0.2.2",
+		OfflineStatus: SupplierOfflineStatusPending,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want := `{"ip":"192.0.2.2","offlineStatus":2,"offlineTime":null}`; string(data) != want {
+		t.Fatalf("unexpected pending item json: %s, want %s", data, want)
+	}
+}
+
 func TestAppChangeProxyReqMarshal(t *testing.T) {
 	req := AppChangeProxyReq{
 		InstanceNo:      "c_test",

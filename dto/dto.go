@@ -737,3 +737,33 @@ type AppResourceOfflineListResp struct {
 	IpList   []string `json:"ipList"`   //下架IP列表
 	CidrList []string `json:"cidrList"` //下架IP段列表
 }
+
+// 供应商下架状态常量。
+const (
+	SupplierOfflineStatusOffline int8 = -1 // 已下架
+	SupplierOfflineStatusPending int8 = 2  // 即将下架
+)
+
+// 获取当前渠道商下架/即将下架代理IP列表请求。
+// 与按批次回查的 AppResourceOfflineListReq 不同，本接口按渠道实例查询，不需要批次号。
+type AppSupplierOfflineListReq struct {
+	OfflineStatus *int8 `json:"offlineStatus,omitempty"` // 可选：-1=已下架，2=即将下架；不传返回两类
+	Page          int   `json:"page,omitempty"`          // 页码 默认1
+	PageSize      int   `json:"pageSize,omitempty"`      // 每页数量 默认100 最大200
+}
+
+// 获取当前渠道商下架/即将下架代理IP列表返回。
+type AppSupplierOfflineListResp struct {
+	Page     int                      `json:"page"`     // 页码
+	PageSize int                      `json:"pageSize"` // 每页数量
+	Total    int64                    `json:"total"`    // 总数量
+	List     []AppSupplierOfflineItem `json:"list"`     // 代理IP状态列表
+}
+
+// 单条供应商下架IP状态。
+// 只返回 ip、下架状态、下架时间三个字段；状态文案由渠道自行映射。
+type AppSupplierOfflineItem struct {
+	Ip            string  `json:"ip"`            // 代理IP
+	OfflineStatus int8    `json:"offlineStatus"` // -1=已下架，2=即将下架
+	OfflineTime   *string `json:"offlineTime"`   // 已下架：平台首次检测时间；即将下架：null
+}
