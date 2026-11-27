@@ -70,6 +70,16 @@ for _, item := range resp.List {
 }
 ```
 
+按 IP 单独查询：
+
+```go
+resp, err := client.GetSupplierOfflineList(dto.AppSupplierOfflineListReq{
+	Ip: "192.0.2.10",
+})
+```
+
+指定 `ip` 时忽略 `page`/`pageSize`，命中时 `list` 最多 1 条，未命中返回空列表；非法 IP 由服务端返回参数错误。`ip` 与 `OfflineStatus` 可以同时传，两个条件同时生效。
+
 字段说明：
 
 | 字段 | 类型 | 说明 |

@@ -380,3 +380,15 @@ func TestIpvClient_GetSupplierOfflineList(t *testing.T) {
 	}
 	t.Logf("%+v", ps)
 }
+
+func TestIpvClient_GetSupplierOfflineListByIp(t *testing.T) {
+	o := dto.AppSupplierOfflineListReq{
+		Ip: "192.0.2.1",
+	}
+	ps, err := getClient().GetSupplierOfflineList(o)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	t.Logf("%+v", ps)
+}
