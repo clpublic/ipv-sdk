@@ -50,3 +50,42 @@ resp, err := client.InstanceRenew(dto.AppInstanceRenewReq{
 ```
 
 例如，按月产品首购 7 天后，`CycleTimes: 1` 续费一个完整月周期（30 天）；不传续费时长也默认一个完整产品周期，不会沿用首购的 7 天。
+
+## 渠道商下架/即将下架代理 IP 列表
+
+`GetSupplierOfflineList` 对应 `POST /api/open/app/instance/offline/list/v2`，只返回当前渠道商自己的、运行中的天翼代理：
+
+```go
+status := dto.SupplierOfflineStatusPending // 只看即将下架；传 nil 返回两类
+resp, err := client.GetSupplierOfflineList(dto.AppSupplierOfflineListReq{
+	OfflineStatus: &status,
+	Page:          1,
+	PageSize:      100,
+})
+if err != nil {
+	// handle error
+}
+for _, item := range resp.List {
+	// item.Ip、item.OfflineStatus、item.OfflineTime
+}
+```
+
+字段说明：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `ip` | string | 代理 IP |
+| `offlineStatus` | int8 | `-1`=已下架，`2`=即将下架 |
+| `offlineTime` | string/null | 已下架为平台首次检测时间；即将下架为 `null` |
+
+状态常量：
+
+- `dto.SupplierOfflineStatusOffline`（`-1`）：已下架；
+- `dto.SupplierOfflineStatusPending`（`2`）：即将下架。
+
+说明：
+
+- 天翼不提供真实下架时间；已下架的 `offlineTime` 是平台首次检测时间，即将下架固定为 `null`。
+- 接口只覆盖天翼；已停止/已关闭/已释放的实例不返回。
+- 不回填历史数据，接口从功能上线时刻开始覆盖。
+- 建议渠道每 30~60 分钟拉取一次并整体替换本地异常 IP 集合；待下架被上游撤销后，下次查询不再返回。

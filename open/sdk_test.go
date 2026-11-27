@@ -365,3 +365,18 @@ func TestIpvClient_GetResourceOfflineList(t *testing.T) {
 	}
 	t.Logf("%+v", ps)
 }
+
+func TestIpvClient_GetSupplierOfflineList(t *testing.T) {
+	status := dto.SupplierOfflineStatusPending
+	o := dto.AppSupplierOfflineListReq{
+		OfflineStatus: &status,
+		Page:          1,
+		PageSize:      10,
+	}
+	ps, err := getClient().GetSupplierOfflineList(o)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	t.Logf("%+v", ps)
+}
