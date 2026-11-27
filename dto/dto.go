@@ -747,9 +747,10 @@ const (
 // 获取当前渠道商下架/即将下架代理IP列表请求。
 // 与按批次回查的 AppResourceOfflineListReq 不同，本接口按渠道实例查询，不需要批次号。
 type AppSupplierOfflineListReq struct {
-	OfflineStatus *int8 `json:"offlineStatus,omitempty"` // 可选：-1=已下架，2=即将下架；不传返回两类
-	Page          int   `json:"page,omitempty"`          // 页码 默认1
-	PageSize      int   `json:"pageSize,omitempty"`      // 每页数量 默认100 最大200
+	Ip            string `json:"ip,omitempty"`            // 可选：指定时只查询该 IP，忽略分页
+	OfflineStatus *int8  `json:"offlineStatus,omitempty"` // 可选：-1=已下架，2=即将下架；不传返回两类
+	Page          int    `json:"page,omitempty"`          // 页码 默认1
+	PageSize      int    `json:"pageSize,omitempty"`      // 每页数量 默认100 最大200
 }
 
 // 获取当前渠道商下架/即将下架代理IP列表返回。

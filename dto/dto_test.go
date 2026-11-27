@@ -28,6 +28,14 @@ func TestAppSupplierOfflineListDTOMarshal(t *testing.T) {
 		t.Fatalf("unexpected request json: %s, want %s", data, want)
 	}
 
+	data, err = json.Marshal(AppSupplierOfflineListReq{Ip: "192.0.2.1"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want := `{"ip":"192.0.2.1"}`; string(data) != want {
+		t.Fatalf("unexpected ip request json: %s, want %s", data, want)
+	}
+
 	offlineTime := "2026-11-27 09:30:12"
 	data, err = json.Marshal(AppSupplierOfflineItem{
 		Ip:            "192.0.2.1",
